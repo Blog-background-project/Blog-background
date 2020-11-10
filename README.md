@@ -4,13 +4,13 @@
 - Javascript
 - Vue
 - Vuex
-- Vue-router
-- Element-ui
-- Vue-cli
-- Webpack
-- Echarts
-- eslint
-# 
+- Vue-router路由
+- Element-ui库
+- Vue-cli脚手架
+- Webpack打包工具
+- Echarts图表UI
+- eslint语法检查
+- less预编辑处理器
 
 
 ## 登录页

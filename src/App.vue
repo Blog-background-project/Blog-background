@@ -1,5 +1,6 @@
 <template>
-  <div>主文件</div>
+  <div>
+  </div>
 </template>
 
 <script>
