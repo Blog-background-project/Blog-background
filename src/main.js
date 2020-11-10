@@ -53,7 +53,7 @@ import router from "@/router"
 //引入Store
 import store from "@/store"
 //引入全局API
-import API from "@/api"
+import * as API from "@/api"
 
 //定义全局组件
 import Header from "@/components/Header"
@@ -62,7 +62,7 @@ Vue.component("Header", Header)
 import Navigation from "@/components/Navigation"
 
 Vue.component("Navigation", Navigation)
-console.log(API)
+
 new Vue({
     beforeCreate() {
         Vue.prototype.$API = API

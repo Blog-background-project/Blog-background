@@ -76,20 +76,32 @@
 <script>
 export default {
   name: "FileManagement",
+  data() {
+    return {};
+  },
   mounted() {
-    this.getQryCategory()
+    this.getQryCategory();
   },
   methods: {
-    getQryCategory(){
-      const str = Response.Cookies["username"].Value.ToString();
-      console.log(str);
-    }
+    // 获取文章所有分类
+    async getQryCategory() {
+      // 从 Cookies 当中取出用户名和 usertoken
+      // const str = Response.Cookies["username"].Value.ToString();
+
+      let username = "2506377990";
+      let usertoken = "6f143f7458956e8cb1af2f950cb2114c";
+      // 发送请求获取文章所有分类
+      const result = await this.$API.getQryCategory(username, usertoken);
+      // console.log(this);
+      // console.log(this.$API.default);
+      // let result = await this.$API.default.getQryCategory();
+    },
   },
 };
 </script>
 
 <style lang='less' scoped>
-.FMContainer{
+.FMContainer {
   width: 100%;
   height: 100%;
 }

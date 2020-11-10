@@ -61,15 +61,16 @@ export default {
 
 
     * */
-    
+
     /*
     * 获取文章所有分类
     * "username": "用户名",
     * "formSource": "请求来源",
     * "usertoken": "鉴权token"
     * */
-    //    qryCategory
-    getQryCategory(username, usertoken) {
+    // qryCategory
+    // getQryCategory(username, usertoken) {
+    getQryCategory() {
         return request({
             url: "qryCategory",
             method: "POST",
@@ -79,5 +80,23 @@ export default {
                 formSource: "web"
             }
         })
-    }
+    },
+    /*
+    * {
+    *   "resultDesc": {
+    *       "errCode": 200,
+    *       "errMsg": "ok"
+    *   },
+    *   "resultData": [
+    *       {
+    *           "cateID": "分类id",
+    *           "cateName": "分类名称",
+    *           "cateAlias": "分类别名",
+    *           "cateCount": "分类文章总数",
+    *           "cateUrl": "分类url"
+    *       }
+    *   ]
+    * }
+    * */
+
 }
