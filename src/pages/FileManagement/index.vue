@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="FMContainer">
     <el-card class="box-card" style="font-size: 16px">
       搜索：分类
       <el-select placeholder="请选择" style="margin: 0 20px" size="small">
@@ -31,8 +31,6 @@
         remote
         reserve-keyword
         placeholder="请输入关键词"
-        :remote-method="remoteMethod"
-        :loading="loading"
         style="margin-right: 20px"
       >
         <!-- <el-option
@@ -79,11 +77,20 @@
 export default {
   name: "FileManagement",
   mounted() {
-    this
+    this.getQryCategory()
   },
-  methods: {},
+  methods: {
+    getQryCategory(){
+      const str = Response.Cookies["username"].Value.ToString();
+      console.log(str);
+    }
+  },
 };
 </script>
 
 <style lang='less' scoped>
+.FMContainer{
+  width: 100%;
+  height: 100%;
+}
 </style>

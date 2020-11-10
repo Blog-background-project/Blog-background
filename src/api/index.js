@@ -32,7 +32,7 @@ export default {
                 formSource: "web"
             }
         })
-    }
+    },
 
     /*
 {
@@ -61,4 +61,23 @@ export default {
 
 
     * */
+    
+    /*
+    * 获取文章所有分类
+    * "username": "用户名",
+    * "formSource": "请求来源",
+    * "usertoken": "鉴权token"
+    * */
+    //    qryCategory
+    getQryCategory(username, usertoken) {
+        return request({
+            url: "qryCategory",
+            method: "POST",
+            data: {
+                username,
+                usertoken,
+                formSource: "web"
+            }
+        })
+    }
 }
