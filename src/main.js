@@ -31,10 +31,12 @@ Vue.component("Header", Header)
 import Navigation from "@/components/Navigation"
 
 Vue.component("Navigation", Navigation)
-console.log(API)
+
 new Vue({
     beforeCreate() {
+        //全局API
         Vue.prototype.$API = API
+        //全局事件总线
         Vue.prototype.$Bus = this
     },
     render: h => h(App),
