@@ -6,10 +6,10 @@ import tanzhiguo from "@/router/modules/tanzhiguo"
 import lvpengchao from "@/router/modules/lvpengchao"
 
 export default [
-    ...aishuaikang,
-    ...huangshaofei,
+    // ...aishuaikang,
+    // ...huangshaofei,
     ...baohua,
-    ...suoxiaoyu,
-    ...tanzhiguo,
-    ...lvpengchao,
+    // ...suoxiaoyu,
+    // ...tanzhiguo,
+    // ...lvpengchao,
 ]
