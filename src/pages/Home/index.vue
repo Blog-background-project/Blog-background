@@ -17,12 +17,19 @@
             </div>
           </div>
         </el-card>
+        <el-card class="dataProgress">
+          <div class="header">语言详情</div>
+          <div></div>
+        </el-card>
       </el-col>
       <!-- 右侧占16份 -->
       <el-col :span="16">
         <el-card shadow="hover">
           <div slot="header"></div>
-          <div></div>
+          <div>
+            Vue
+            <el-progress :percentage="71.3" color="#42b983"></el-progress>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -35,8 +42,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 用户信息
 .userContainer {
   padding: 20px;
+  height: 252px;
+  margin-bottom: 20px;
   .userInfo {
     display: flex;
     align-items: center;
@@ -53,6 +63,18 @@ export default {
         }
       }
     }
+  }
+}
+// 数据进度条
+.dataProgress {
+  height: 252px;
+  .header{
+    padding: 0px 20px 20px;
+    // line-height: ;
+    color: #303133;
+    font-size: 18px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
   }
 }
 </style>
