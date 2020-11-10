@@ -22,7 +22,8 @@ import {
     Pagination,
     TableColumn,
     Table,
-    Checkbox
+    Checkbox,
+    Input,
 } from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -45,7 +46,7 @@ Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
-
+Vue.use(Input);
 
 //引入路由器
 import router from "@/router"
