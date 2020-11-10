@@ -19,7 +19,11 @@ import {
     Progress,
     Row,
     Col,
-    Avatar
+    Avatar,
+    Pagination,
+    TableColumn,
+    Table,
+    Checkbox
 } from 'element-ui';
 //注册element组件
 Vue.use(Dropdown)
@@ -36,6 +40,13 @@ Vue.use(Row)
 Vue.use(Col)
 Vue.use(Progress)
 Vue.use(Avatar)
+Vue.use(Card)
+
+Vue.use(Checkbox)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
+
 
 //引入路由器
 import router from "@/router"
