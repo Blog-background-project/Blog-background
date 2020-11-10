@@ -5,6 +5,25 @@ Vue.config.productionTip = false
 
 //引入element-ui
 import '../theme/index.css' //自定义主题
+<<<<<<< HEAD
+import {
+    Button,
+    Select,
+    Card,
+    Progress,
+    Row,
+    Col,
+    Avatar
+} from 'element-ui';
+//注册element组件
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(Card)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Progress)
+Vue.use(Avatar)
+=======
 import {Button, Select, Dropdown, DropdownMenu, DropdownItem, Tooltip, Menu, Submenu, MenuItem} from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -16,6 +35,7 @@ Vue.use(Tooltip)
 Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
+>>>>>>> 60c170bf9af799e5c079fbbe9b3063bf48357d43
 
 //引入路由器
 import router from "@/router"
