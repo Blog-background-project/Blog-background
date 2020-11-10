@@ -69,12 +69,12 @@ export default {
         },
         {
           icon: 'el-icon-thumb',
-          index: 'table',
+          index: 'filemanagement',
           title: '文章管理'
         },
         {
           icon: 'el-icon-menu',
-          index: 'tabs',
+          index: 'categorylist',
           title: '分类管理'
         },
         {
