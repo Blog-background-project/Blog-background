@@ -4,11 +4,10 @@ import baohua from "@/router/modules/baohua"
 import suoxiaoyu from "@/router/modules/suoxiaoyu"
 import tanzhiguo from "@/router/modules/tanzhiguo"
 import lvpengchao from "@/router/modules/lvpengchao"
-console.log(huangshaofei)
 export default [
     // ...aishuaikang,
-    ...huangshaofei,
-    // ...baohua,
+    // ...huangshaofei,
+    ...baohua,
     // ...suoxiaoyu,
     // ...tanzhiguo,
     // ...lvpengchao,

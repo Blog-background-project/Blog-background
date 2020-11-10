@@ -78,7 +78,9 @@
 <script>
 export default {
   name: "FileManagement",
-  mounted() {},
+  mounted() {
+    this
+  },
   methods: {},
 };
 </script>
