@@ -3,13 +3,13 @@
     <el-card class="box-card" style="font-size: 16px">
       搜索：分类
       <el-select placeholder="请选择" style="margin: 0 20px" size="small">
-        <!-- <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+        <el-option
+          v-for="item in qryCategory"
+          :key="item.cateID"
+          :label="item.cateName"
+          :value="item.cateName"
         >
-        </el-option> -->
+        </el-option>
       </el-select>
       类型
       <el-select placeholder="请选择" style="margin-right: 20px" size="small">
@@ -77,7 +77,11 @@
 export default {
   name: "FileManagement",
   data() {
-    return {};
+    return {
+      qryCategory:{
+        qryCategoryItem:""
+      }
+    };
   },
   mounted() {
     this.getQryCategory();
@@ -88,13 +92,12 @@ export default {
       // 从 Cookies 当中取出用户名和 usertoken
       // const str = Response.Cookies["username"].Value.ToString();
 
-      let username = "2506377990";
-      let usertoken = "6f143f7458956e8cb1af2f950cb2114c";
+      let data = {}
+      data.username = "2506377990";
+      data.usertoken = "1ebb4f55b8af89b38238d40b92569385";
       // 发送请求获取文章所有分类
-      const result = await this.$API.getQryCategory(username, usertoken);
-      // console.log(this);
-      // console.log(this.$API.default);
-      // let result = await this.$API.default.getQryCategory();
+      const result = await this.$API.reqQryCategory(data);
+      this.qryCategory = result.resultData
     },
   },
 };

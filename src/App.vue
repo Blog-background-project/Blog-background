@@ -1,8 +1,8 @@
 <template>
   <div>
     <Header></Header>
-    <Navigation></Navigation>
     <router-view></router-view>
+    <Navigation></Navigation>
   </div>
 </template>
 
