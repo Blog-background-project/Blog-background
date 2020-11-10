@@ -8,18 +8,22 @@ import '../theme/index.css' //自定义主题
 import {
     Button,
     Select,
-    Card,
-    Progress,
-    Row,
-    Col,
-    Avatar,
     Dropdown,
     DropdownMenu,
     DropdownItem,
     Tooltip,
     Menu,
     Submenu,
-    MenuItem
+    MenuItem,
+    Card,
+    Progress,
+    Row,
+    Col,
+    Avatar,
+    Pagination,
+    TableColumn,
+    Table,
+    Checkbox
 } from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -29,6 +33,7 @@ Vue.use(Row)
 Vue.use(Col)
 Vue.use(Progress)
 Vue.use(Avatar)
+
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
@@ -36,6 +41,12 @@ Vue.use(Tooltip)
 Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
+
+Vue.use(Checkbox)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
+
 
 
 //引入路由器
