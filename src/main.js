@@ -14,7 +14,7 @@ Vue.use(Select)
 import router from "@/router"
 //引入Store
 import store from "@/store"
-
+//引入全局API
 import API from "@/api"
 
 new Vue({
