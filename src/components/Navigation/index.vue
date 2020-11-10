@@ -95,7 +95,7 @@ export default {
     // 通过 Event Bus 进行组件间通信，来折叠侧边栏
     this.$Bus.$on('collapse', msg => {
       this.collapse = msg;
-      // this.$Bus.$emit('collapse-content', msg);
+      this.$Bus.$emit('collapse-content', msg);
     });
   }
 };
