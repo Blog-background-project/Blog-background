@@ -15,8 +15,12 @@ import router from "@/router"
 //引入Store
 import store from "@/store"
 
+import API from "@/api"
 
 new Vue({
+    beforeCreate() {
+        Vue.prototype.$API = API
+    },
     render: h => h(App),
     router,
     store
