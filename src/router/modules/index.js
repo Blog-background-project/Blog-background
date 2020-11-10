@@ -8,7 +8,7 @@ import lvpengchao from "@/router/modules/lvpengchao"
 export default [
     // ...aishuaikang,
     // ...huangshaofei,
-    // ...baohua,
+    ...baohua,
     // ...suoxiaoyu,
     // ...tanzhiguo,
     // ...lvpengchao,
