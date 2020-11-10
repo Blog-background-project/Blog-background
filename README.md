@@ -1,5 +1,18 @@
 # 博客后台项目管理系统开发文档
 
+# 技术栈
+- Javascript
+- Vue
+- Vuex
+- Vue-router
+- Element-ui
+- Vue-cli
+- Webpack
+- Echarts
+- eslint
+# 
+
+
 ## 登录页
 
 - 用户名效验
