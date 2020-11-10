@@ -26,13 +26,6 @@ import {
     Checkbox
 } from 'element-ui';
 //注册element组件
-Vue.use(Dropdown)
-Vue.use(DropdownMenu)
-Vue.use(DropdownItem)
-Vue.use(Tooltip)
-Vue.use(Menu)
-Vue.use(Submenu)
-Vue.use(MenuItem)
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(Card)
@@ -40,12 +33,20 @@ Vue.use(Row)
 Vue.use(Col)
 Vue.use(Progress)
 Vue.use(Avatar)
-Vue.use(Card)
+
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Tooltip)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
 
 Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
+
 
 
 //引入路由器
@@ -62,10 +63,12 @@ Vue.component("Header", Header)
 import Navigation from "@/components/Navigation"
 
 Vue.component("Navigation", Navigation)
-console.log(API)
+
 new Vue({
     beforeCreate() {
+        //全局API
         Vue.prototype.$API = API
+        //全局事件总线
         Vue.prototype.$Bus = this
     },
     render: h => h(App),
