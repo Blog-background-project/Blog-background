@@ -14,7 +14,7 @@ Vue.config.productionTip = false
 
 
 //引入element-ui
-import { Button, Select, DatePicker, TimePicker, Switch } from 'element-ui';
+import {Button, Select, DatePicker, TimePicker, Switch} from 'element-ui';
 //注册element组件
 Vue.use(Button)
 Vue.use(Select)
@@ -45,6 +45,9 @@ import {
     BreadcrumbItem,
     Tabs,
     TabPane,
+    Dialog,
+    Form,
+    FormItem,
     Input,
     Message,
 } from 'element-ui';
@@ -74,8 +77,9 @@ Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
 Vue.use(Tabs)
 Vue.use(TabPane)
-
-
+Vue.use(Dialog)
+Vue.use(Form)
+Vue.use(FormItem)
 
 
 //引入路由器
