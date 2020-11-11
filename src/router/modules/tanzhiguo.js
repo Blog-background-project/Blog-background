@@ -1,8 +1,8 @@
-import Article from '@/pages/Article'
+import Articles from '@/pages/Articles'
 
 export default [
     {
-        path:'/article',
-        component:Article
+        path:'/articles',
+        component:Articles
     }
 ]
