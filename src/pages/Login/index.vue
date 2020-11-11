@@ -5,7 +5,7 @@
     <div class="userlogin">
       <!-- 登录区 头像区 -->
       <div class="userheader">
-        <img src="./images/biao.png" alt="" />
+        <img src="./images/biao.png" alt=""/>
         <h3>用户登录</h3>
       </div>
 
@@ -15,21 +15,21 @@
         <div class="layui-form-item">
           <label for="username" class="el-icon-s-custom"></label>
           <input
-            type="text"
-            name="username"
-            class="username"
-            placeholder="请以字母开头，用户名最少6位"
-            v-model="userName"
+              type="text"
+              name="username"
+              class="username"
+              placeholder="请以字母开头，用户名最少6位"
+              v-model="userName"
           />
         </div>
         <!-- 密码 -->
         <div class="layui-form-item layui-form-item-password">
           <label class="el-icon-goods" style="z-index: 10"></label>
           <el-input
-            placeholder="密码最少6位必须包含数字字母"
-            v-model="password"
-            show-password
-            class="password"
+              placeholder="密码最少6位必须包含数字字母"
+              v-model="password"
+              show-password
+              class="password"
           >
             <label for="password" class="el-icon-goods"></label>
           </el-input>
@@ -45,10 +45,10 @@
         <div class="layui-form-item layui-form-yj">
           <label class="el-icon-circle-check" for="vercode"> </label>
           <input
-            type="text"
-            name="vercode"
-            id="vercode"
-            placeholder="请输入验证码"
+              type="text"
+              name="vercode"
+              id="vercode"
+              placeholder="请输入验证码"
           />
           <!-- <div class="captcha"></div> -->
         </div>
@@ -56,10 +56,10 @@
         <div class="layui-form-item layui-form-item-check">
           <div class="layui-form-item-left">
             <input
-              type="checkbox"
-              class="checkbox"
-              @click="changeChecked"
-              :checked="checked"
+                type="checkbox"
+                class="checkbox"
+                @click="changeChecked"
+                :checked="checked"
             />
             <span>保持登录</span>
           </div>
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex"
+
 export default {
   name: "login",
   data() {
@@ -90,9 +92,14 @@ export default {
       checked: "",
     };
   },
+  mounted() {
+    if (this.token) {
+      this.$router.push("/home")
+    }
+  },
   methods: {
     async changeLogin() {
-      let { userName, password } = this;
+      let {userName, password} = this;
       // 手机号为空
       if (!userName.trim()) {
         // 提示用户
@@ -152,11 +159,14 @@ export default {
         this.$router.push("/home");
         alert("登录成功");
         // console.log(result);
+        this.$store.commit("SETUSERNAME", result.resultData.userName)
+        this.$store.commit("SETTOKEN", result.resultData.token)
+
         if (this.checked) {
           sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
           sessionStorage.setItem(
-            "OPENTUSERNAME_KEY",
-            result.resultData.userName
+              "OPENTUSERNAME_KEY",
+              result.resultData.userName
           );
         } else {
           localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
@@ -170,10 +180,15 @@ export default {
       this.checked = !this.checked;
     },
   },
+  computed: {
+    ...mapState({
+      token: state => state.Login.token
+    })
+  }
 };
 </script>
 
-<style  lang ='less' scoped>
+<style lang='less' scoped>
 /* 背景图 */
 .login-container {
   background: url(./images/th.jpg);
@@ -186,6 +201,7 @@ export default {
   bottom: 0px;
   /* position: relative; */
   /* 登录区域 */
+
   .userlogin {
     position: absolute;
     /* z-index: 100; */
@@ -206,6 +222,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     /* 登录区头部 */
+
     .userheader {
       width: 378px;
       height: 120px;
@@ -213,10 +230,12 @@ export default {
       text-align: center;
       padding: 10px;
       box-sizing: border-box;
+
       img {
         width: 60px;
         height: 60px;
       }
+
       h3 {
         font-size: 25px;
         color: #ffff;
@@ -225,6 +244,7 @@ export default {
     }
 
     /* 登录  输入区 */
+
     .user_login {
       width: 378px;
       height: 358px;
@@ -233,6 +253,7 @@ export default {
       padding: 30px 30px 10px;
       border-color: #d2d2d2 !important;
       /* 公共部分 */
+
       .layui-form-item {
         margin-bottom: 15px;
         width: 318px;
@@ -243,6 +264,7 @@ export default {
         color: rgb(210, 210, 210);
         border-color: #e6e6e6;
         outline: none;
+
         .el-icon-s-custom {
           position: absolute;
           width: 38px;
@@ -253,7 +275,9 @@ export default {
           text-align: center;
           color: #d2d2d2;
         }
+
         /* 用户名 */
+
         .username {
           width: 100%;
           height: 100%;
@@ -263,14 +287,17 @@ export default {
           border: 1px solid #ccc;
           border-radius: 5px;
         }
+
         /* 密码 */
-        /deep/.el-input__inner {
+
+        /deep/ .el-input__inner {
           width: 318px;
           height: 40px;
           outline: none;
           box-sizing: border-box;
           padding: 0 0 0 30px;
         }
+
         .el-icon-goods {
           position: absolute;
           width: 38px;
@@ -288,6 +315,7 @@ export default {
           height: 28px;
           margin:  0 0 0 20px;
         } */
+
         .el-icon-circle-check {
           position: absolute;
           width: 38px;
@@ -298,6 +326,7 @@ export default {
           text-align: center;
           color: #d2d2d2;
         }
+
         #vercode {
           width: 185.5px;
           height: 38px;
@@ -306,9 +335,11 @@ export default {
           border: 1px solid #ccc;
           outline: none;
         }
+
         input::-webkit-input-placeholder {
           color: #ccc;
         }
+
         .layui-form-item1 {
           width: 185.5px;
           height: 38px;
@@ -321,6 +352,7 @@ export default {
           text-align: center;
           color: #d2d2d2;
         }
+
         .captcha {
           float: right;
           width: 122.5px;
@@ -328,7 +360,9 @@ export default {
           box-sizing: border-box;
           border: 1px solid red;
         }
+
         /* 保持通常 */
+
         .checkbox {
           width: 12px;
           height: 13px;
@@ -340,6 +374,7 @@ export default {
           text-align: center;
           color: #d2d2d2;
         }
+
         span {
           height: 28px;
           line-height: 28px;
@@ -347,18 +382,21 @@ export default {
           color: #333;
           font-size: 14px;
         }
+
         a {
           line-height: 24px;
           font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial,
-            sans-serif;
+          sans-serif;
           text-emphasis: none;
         }
       }
+
       .layui-form-item-check {
         display: flex;
         justify-content: space-between;
         height: 28px;
       }
+
       .userinfo-login {
         width: 318px;
         height: 38px;
@@ -366,6 +404,7 @@ export default {
         background-color: #ff5722;
         text-align: center;
         color: white;
+
         a {
           width: 100%;
           height: 100%;
@@ -375,12 +414,14 @@ export default {
           line-height: 38px;
         }
       }
+
       /* .layui-form-item-password{
         .password{
           border: none;
           position: relative;
         }
       } */
+
       .layui-form-item-rigester {
         a {
           float: right;
