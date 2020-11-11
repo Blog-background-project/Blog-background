@@ -4,14 +4,16 @@
 - Javascript
 - Vue
 - Vuex
+- Vue-schart
 - Vue-router路由
 - Element-ui库
 - Vue-cli脚手架
 - Webpack打包工具
-- Echarts图表UI
 - eslint语法检查
 - less预编辑处理器
 
+# 通信手段
+- 全局事件总线
 
 ## 登录页
 
@@ -66,4 +68,4 @@
 - 筛选:公开\草稿\审核三个状态
 
 ## 分类管理(增删改查)
-- 
+## 标签管理(增删改查)

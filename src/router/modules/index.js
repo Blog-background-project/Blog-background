@@ -7,9 +7,13 @@ import lvpengchao from "@/router/modules/lvpengchao"
 
 export default [
     // ...aishuaikang,
-    // ...huangshaofei,
-    // ...baohua,
-    // ...suoxiaoyu,
     ...tanzhiguo,
     // ...lvpengchao,
+    ...suoxiaoyu,
+    ...baohua,
+    ...huangshaofei,
+    {
+        path: "",
+        redirect: "/home"
+    }
 ]
