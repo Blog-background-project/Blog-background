@@ -7,7 +7,8 @@
           v-for="item in qryCategory"
           :key="item.cateID"
           :label="item.cateName"
-          :value="item.cateName"
+          :value="item"
+          v-model="cateName"
         >
         </el-option>
       </el-select>
@@ -80,7 +81,8 @@ export default {
     return {
       qryCategory:{
         qryCategoryItem:""
-      }
+      },
+      cateName:""
     };
   },
   mounted() {
@@ -94,7 +96,7 @@ export default {
 
       let data = {}
       data.username = "2506377990";
-      data.usertoken = "1ebb4f55b8af89b38238d40b92569385";
+      data.usertoken = "24d1e207600980760e3297e6db20e970";
       // 发送请求获取文章所有分类
       const result = await this.$API.reqQryCategory(data);
       this.qryCategory = result.resultData
