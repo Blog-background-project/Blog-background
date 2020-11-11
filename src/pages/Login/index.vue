@@ -55,7 +55,12 @@
         <!-- 保持登录区 -->
         <div class="layui-form-item layui-form-item-check">
           <div class="layui-form-item-left">
-            <input type="checkbox" class="checkbox" @click="!this.checked" />
+            <input
+              type="checkbox"
+              class="checkbox"
+              @click="changeChecked"
+              :checked="checked"
+            />
             <span>保持登录</span>
           </div>
           <div class="layui-form-item-right">
@@ -82,7 +87,7 @@ export default {
       input: "",
       userName: "",
       password: "",
-      checked: false,
+      checked: "",
     };
   },
   methods: {
@@ -133,21 +138,36 @@ export default {
       //         data
       //     })
       // },
-        // md5  加密使用方法
-      // this.$md5('holle world') 
+      // md5  加密使用方法
+      // this.$md5('holle world')
 
-      const data= {}
-      data.username = userName
-     
-      data.password = this.$md5(password.trim())
+      const data = {};
+      data.username = userName;
+
+      data.password = this.$md5(password.trim());
       // console.log(this.$md5(password))
       const result = await this.$API.reqLogin(data);
       // console.log(result)
-      if(result.resultDesc.errCode === 200 ){
-        alert('登录成功')
-      }else{
-        alert('登录失败，请重新登录')
-      }    
+      if (result.resultDesc.errCode === 200) {
+        this.$router.push("/home");
+        alert("登录成功");
+        // console.log(result);
+        if (this.checked) {
+          sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
+          sessionStorage.setItem(
+            "OPENTUSERNAME_KEY",
+            result.resultData.userName
+          );
+        } else {
+          localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
+          localStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+        }
+      } else {
+        alert("登录失败，请重新登录");
+      }
+    },
+    changeChecked() {
+      this.checked = !this.checked;
     },
   },
 };
