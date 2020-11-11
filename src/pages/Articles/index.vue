@@ -99,7 +99,7 @@
 </template>
 <script>
 export default {
-  name: "article",
+  name: "articles",
   data() {
     return {
       // cateId: "", //分类id
@@ -198,7 +198,7 @@ export default {
             background-color: #fff;
             height: 300px;
             border: none;
-            /deep/.ql-editor {
+            .ql-editor {
               width: 1000px;
               height: 300px;
               border-color: #ccc;
