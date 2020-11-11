@@ -12,7 +12,7 @@ Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 //引入element-ui
-import {Button, Select,DatePicker,TimePicker,Switch} from 'element-ui';
+import { Button, Select, DatePicker, TimePicker, Switch } from 'element-ui';
 //注册element组件
 Vue.use(Button)
 Vue.use(Select)
@@ -36,6 +36,9 @@ import {
     TableColumn,
     Table,
     Checkbox,
+    Input,
+    Popover,
+    Popconfirm,
     Breadcrumb,
     BreadcrumbItem,
     Tabs,
@@ -60,6 +63,9 @@ Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
+Vue.use(Input);
+Vue.use(Popover);
+Vue.use(Popconfirm);
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
 Vue.use(Tabs)

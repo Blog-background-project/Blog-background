@@ -55,7 +55,7 @@
         <!-- 保持登录区 -->
         <div class="layui-form-item layui-form-item-check">
           <div class="layui-form-item-left">
-            <input type="checkbox" class="checkbox" />
+            <input type="checkbox" class="checkbox"checked />
             <span>保持登录</span>
           </div>
           <div class="layui-form-item-right">
@@ -82,6 +82,7 @@ export default {
       input: "",
       userName: "",
       passWord: "",
+
     };
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
         alert("密码不能为空");
         return;
       }
-      
+
     },
   },
 };
