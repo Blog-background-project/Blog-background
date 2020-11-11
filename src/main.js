@@ -21,6 +21,7 @@ Vue.use(Select)
 Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Switch)
+
 import {
     Dropdown,
     DropdownMenu,
@@ -38,13 +39,14 @@ import {
     TableColumn,
     Table,
     Checkbox,
-    Input,
     Popover,
     Popconfirm,
     Breadcrumb,
     BreadcrumbItem,
     Tabs,
     TabPane,
+    Input,
+    Message,
 } from 'element-ui';
 //注册element组件
 Vue.use(Card)
@@ -99,6 +101,8 @@ new Vue({
         Vue.prototype.$Bus = this
         // 全局md5加密
         Vue.prototype.$md5 = md5;
+        //message框
+        Vue.prototype.$message = Message;
     },
     render: h => h(App),
     router,

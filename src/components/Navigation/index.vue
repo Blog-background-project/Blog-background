@@ -64,7 +64,7 @@ export default {
         },
         {
           icon: 'el-icon-edit',
-          index: 'article',
+          index: 'articles',
           title: '新建文章'
         },
         {
