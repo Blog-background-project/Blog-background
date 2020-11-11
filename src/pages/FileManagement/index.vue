@@ -102,17 +102,29 @@
 
     <el-card v-show="checkout">
       <span style="font-size: 16px">标题</span>
-      <el-input placeholder=""></el-input>
-      <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-      >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+
+      <el-form :model="form" label-width="80px">
+        <el-form-item label="label">
+          <el-input v-model="model"></el-input>
+        </el-form-item>
+
+        <el-form-item label="label">
+          <div>
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </div>
+        </el-form-item>
+
+        
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -142,6 +154,7 @@ export default {
       checkout: true,
       // 图片
       imageUrl: "",
+      form: {},
     };
   },
   mounted() {
