@@ -1,12 +1,15 @@
 <template>
-  <div class="FMContainer">
-    <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
-      <i
-        class="el-icon-document-copy"
-        style="font-size: 30px; margin-bottom: 20px"
-        >文章管理</i
-      >
-
+  <div>
+    <i
+      class="el-icon-document-copy"
+      style="font-size: 30px; margin-bottom: 20px"
+      >文章管理</i
+    >
+    <el-card
+      class="box-card"
+      style="font-size: 16px; margin-bottom: 20px"
+      v-show="!checkout"
+    >
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="搜索：分类">
           <el-select v-model="formInline.cate" size="small" placeholder="分类">
@@ -44,12 +47,14 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" size="small">提交</el-button>
+          <el-button type="primary" size="small" @click="changeAjak"
+            >提交</el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
 
-    <el-card>
+    <el-card v-show="!checkout">
       <el-table :data="qryArticle" style="width: 100%" border stripe>
         <el-table-column prop="id" label="ID" width="80"> </el-table-column>
         <el-table-column prop="cateName" label="分类" width="120">
@@ -58,7 +63,12 @@
         </el-table-column>
         <el-table-column prop="title" label="标题" width="width">
         </el-table-column>
-        <el-table-column prop="prop" label="日期" width="width">
+        <el-table-column
+          prop="prop"
+          label="日期"
+          width="width"
+          cell-click="sorting"
+        >
           <template slot-scope="{ row, $index }"> </template>
         </el-table-column>
         <el-table-column prop="commNums" label="评论" width="80">
@@ -75,7 +85,9 @@
         <el-table-column prop="prop" label="操作" width="160">
           <template slot-scope="{ row, $index }">
             <el-button type="primary" size="small">修改</el-button>
-            <el-button type="danger" size="small">删除</el-button>
+            <el-button type="danger" size="small" @click="deleteItem($index)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -86,6 +98,21 @@
         :total="1000"
       >
       </el-pagination>
+    </el-card>
+
+    <el-card v-show="checkout">
+      <span style="font-size: 16px">标题</span>
+      <el-input placeholder=""></el-input>
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
     </el-card>
   </div>
 </template>
@@ -104,12 +131,17 @@ export default {
         pageNo: "", //类型
         title: "", //输入内容
       },
+      // 用户数据
       userInfo: {
         username: "2506377990",
-        usertoken: "45a8d6ebd5cc653eca44b1e5e6e846d3",
+        usertoken: "f788c103be4c18c50f0d52e54a010b0c",
       },
       // 文章列表
       qryArticle: [],
+      // 是否显示文章详情页
+      checkout: true,
+      // 图片
+      imageUrl: "",
     };
   },
   mounted() {
@@ -119,6 +151,23 @@ export default {
     this.getQryCategory();
   },
   methods: {
+    // 上传图片
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+
     // 获取文章所有分类
     async getQryCategory() {
       // 发送请求获取文章所有分类
@@ -126,22 +175,84 @@ export default {
       this.qryCategory = result.resultData;
     },
 
+    // 获取文章列表
     async getQryArticle(cate = 0, pageSize = 10, pageNo = 1) {
       let info = this.userInfo;
       info.cate = cate;
       info.pageNo = pageNo;
       info.pageSize = pageSize;
       const result = await this.$API.reqQryArticle(info);
-      // console.log(result);
       this.qryArticle = result.resultData;
+      // let timeList = []
+      // for (let index = 0; index < result.resultData.length; index++) {
+      //   timeList.push(result.resultData[index])
+      // }
+    },
+
+    // 根据分类获取数据
+    changeAjak() {
+      let { cate, pageNo, title } = this.formInline;
+      this.getQryArticle(cate, pageNo);
+      // console.log(this.timeList);
+    },
+
+    // 删除文章‘
+    async deleteItem(index) {
+      let { userInfo } = this;
+      userInfo.index = index;
+      const result = await this.$API.reqDelArticle(userInfo);
+    },
+
+    // 排序
+    sorting() {
+      console.log(111);
+    },
+
+    // 格式化时间
+    timestampToTime(timestamp) {
+      var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      var D =
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+      var h =
+        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+      var m =
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+        ":";
+      var s =
+        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+      return Y + M + D + h + m + s;
     },
   },
 };
 </script>
 
 <style lang='less' scoped>
-.FMContainer {
-  width: 100%;
-  height: 100%;
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

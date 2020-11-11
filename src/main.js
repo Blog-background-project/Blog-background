@@ -13,16 +13,12 @@ Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 
-//引入element-ui
-import {Button, Select, DatePicker, TimePicker, Switch} from 'element-ui';
-//注册element组件
-Vue.use(Button)
-Vue.use(Select)
-Vue.use(DatePicker)
-Vue.use(TimePicker)
-Vue.use(Switch)
-
 import {
+    Button,
+    Select,
+    DatePicker,
+    TimePicker,
+    Switch,
     Dropdown,
     DropdownMenu,
     DropdownItem,
@@ -53,9 +49,11 @@ import {
     TabPane,
     Dialog,
     Message,
+    Upload
 } from 'element-ui';
 //注册element组件
 Vue.use(Card)
+Vue.use(Upload)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Progress)
@@ -86,6 +84,11 @@ Vue.use(TabPane)
 Vue.use(Dialog)
 Vue.use(Form)
 Vue.use(FormItem)
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
 
 
 //引入路由器
