@@ -1,7 +1,7 @@
 import Axios from "axios"
 
 let instance = Axios.create({
-    baseURL: "/zb_users/plugin/haloapi/api.php?act=",
+    baseURL: "/api",
     timeout: 20000
 })
 
@@ -17,4 +17,4 @@ instance.interceptors.response.use((value) => {
     return Promise.reject(error)
 })
 
-export default instance()
+export default instance
