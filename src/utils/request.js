@@ -15,6 +15,7 @@ instance.interceptors.request.use((config) => {
 
 //响应拦截器
 instance.interceptors.response.use((value) => {
+    //统一处理错误
     if (value.data.resultDesc.errCode === 200) return value.data
     else _Message.error(value.data.resultDesc.errMsg)
 }, (error) => {
