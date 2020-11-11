@@ -18,31 +18,46 @@
     </div>
     <!-- 内容展示区域 -->
     <div class="showCon">
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="id" label="分类ID" width="180">
+      <el-table :data="categoryInfo" border style="width: 100%">
+        <el-table-column
+          prop="cateID"
+          label="分类ID"
+          width="100"
+          align="center"
+        >
         </el-table-column>
-        <el-table-column prop="name" label="分类名称" width="180">
+        <el-table-column
+          prop="cateName"
+          label="分类名称"
+          width="150"
+          align="center"
+        >
         </el-table-column>
-        <el-table-column prop="othername" label="分类别名"> </el-table-column>
-        <el-table-column prop="other" label="操作">
-          <template slot-scope="scope">
+        <el-table-column
+          prop="cateAlias"
+          label="分类别名"
+          width="150"
+          align="center"
+        >
+        </el-table-column>
+        <el-table-column prop="cateUrl" label="类别路径"> </el-table-column>
+        <el-table-column prop="other" label="操作" width="180" align="center">
+          <!-- 作用域插槽 -->
+          <template slot-scope="{ row, $index }">
             <el-button
               type="primary"
               class="el-icon-edit"
               size="mini"
               title="修改"
             ></el-button>
-            <el-popconfirm
-              title="这是一段内容确定删除吗？"
-              :ref="`popcover-${scope.$index}}`"
-            >
+            <el-popconfirm title="你确定删除该分类吗？">
               <el-button
                 style="margin-left: 5px"
                 slot="reference"
                 type="danger"
                 class="el-icon-delete"
                 size="mini"
-                @click="handle"
+                @click="deletCategory"
               ></el-button>
             </el-popconfirm>
           </template>
@@ -52,12 +67,12 @@
       <el-pagination
         style="margin-top: 20px"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage1"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="100"
+        @current-change="getQryCategory"
+        :current-page="page"
+        :page-sizes="[3, 5, 10, 15]"
+        :page-size="limit"
         layout=" prev, pager, next, jumper,->, sizes,total"
-        :total="400"
+        :total="total"
         :hide-on-single-page="value"
       >
       </el-pagination>
@@ -71,38 +86,44 @@ export default {
   data() {
     return {
       input: "", //输入框收集的值
-      currentPage1: 1, //分页器当前页
+      page: 1, //分页器当前页
+      limit: 3,
+      total: 0,
       value: false, // value用来当只有一页时隐藏分页
-      //表单的值
-      tableData: [
-        {
-          id: "1234",
-          name: "博客",
-          othername: "BOKE",
-        },
-        {
-          id: "1234",
-          name: "博客",
-          othername: "BOKE",
-        },
-      ],
+      categoryInfo: [],
     };
   },
-  mounted() {},
+  mounted() {
+    this.getQryCategory();
+  },
   methods: {
     // 分页器处理每页的回调
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    handleSizeChange(size) {
+      this.limit = size;
+      this.getQryCategory(this.page);
+      // console.log(`${size}条每页`);
+      // console.log("当前页", this.limit);
     },
     // 分页器处理当前页的回调
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      console.log(`当前页${val}`);
     },
     // 处理删除的回调
-    handle() {
+    deletCategory() {
       console.log(123);
     },
     // 请求
+    async getQryCategory(data, pagee = 1) {
+      this.page = pagee;
+      let { page, limit } = this;
+      let result = await this.$API.reqQryCategory({ data });
+      // let result = await this.$API.reqQryCategory({ data }, page, limit);
+      if (result.resultDesc.errCode === 200) {
+        this.categoryInfo = result.resultData;
+        this.total = result.resultData.length;
+        console.log(page, limit);
+      }
+    },
   },
 };
 </script>
