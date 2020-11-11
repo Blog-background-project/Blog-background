@@ -10,10 +10,11 @@ export default [
     ...suoxiaoyu,
     ...baohua,
     ...huangshaofei,
-    ...tanzhiguo,
-    // ...lvpengchao,
+    // ...tanzhiguo,
+     ...lvpengchao,
     {
         path: "",
         redirect: "/home"
     }
+
 ]
