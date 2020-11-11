@@ -66,7 +66,7 @@
           <li>
             <h3 class="disp">置顶</h3>
             <select style="width: 80px" v-model="articleItem.isTop">
-              <option selected="selected" value="0">无</option>
+              <option  value="0">无</option>
               <option value="2">首页</option>
               <option value="1">全局</option>
               <option value="4">分类</option>
@@ -117,21 +117,31 @@ export default {
         usertoken: "d39eb03dcd8ee769b62f5e105accf75e",
       },
       articleItem: {
-        cateID: "",
+        cateID: 1,
         content: "",
-        isTop: "",
-        status: "",
+        isTop: 0,
+        status: 0,
         tag: "",
         title: "",
       },
+      result:{}
     };
   },
   methods: {
-    sub() {
-      alert(this.articleItem.content)
+    async sub() {
       this.obj.articleItem = JSON.stringify(this.articleItem);
-      this.$API.reqPostArticle(this.obj);
+      let result  = await this.$API.reqPostArticle(this.obj);
+      this.result = result
+      if(result.resultDesc.errCode!==200){
+        this.open3()
+      };
     },
+      open3() {
+        this.$message({
+          message:this.result.resultDesc.errMsg,
+          type: 'warning'
+        });
+      },
   },
 };
 </script>

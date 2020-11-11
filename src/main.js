@@ -12,13 +12,14 @@ Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 //引入element-ui
-import {Button, Select,DatePicker,TimePicker,Switch} from 'element-ui';
+import {Button, Select,DatePicker,TimePicker,Switch, } from 'element-ui';
 //注册element组件
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Switch)
+
 import {
     Dropdown,
     DropdownMenu,
@@ -37,6 +38,7 @@ import {
     Table,
     Checkbox,
     Input,
+    Message,
 } from 'element-ui';
 //注册element组件
 Vue.use(Card)
@@ -80,6 +82,8 @@ new Vue({
         Vue.prototype.$API = API
         //全局事件总线
         Vue.prototype.$Bus = this
+        //message框
+        Vue.prototype.$message = Message;
     },
     render: h => h(App),
     router,
