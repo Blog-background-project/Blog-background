@@ -10,7 +10,7 @@ export default [
     ...suoxiaoyu,
     ...baohua,
     ...huangshaofei,
-    // ...tanzhiguo,
+    ...tanzhiguo,
      ...lvpengchao,
     {
         path: "",
