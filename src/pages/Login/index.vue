@@ -55,7 +55,7 @@
         <!-- 保持登录区 -->
         <div class="layui-form-item layui-form-item-check">
           <div class="layui-form-item-left">
-            <input type="checkbox" class="checkbox"checked />
+            <input type="checkbox" class="checkbox" @click="!this.checked" />
             <span>保持登录</span>
           </div>
           <div class="layui-form-item-right">
@@ -82,6 +82,7 @@ export default {
       input: "",
       userName: "",
       passWord: "",
+      checked:false
 
     };
   },
@@ -319,7 +320,7 @@ export default {
           text-decoration: none;
           color: white;
           height: 38px;
-          line-height: ;
+          line-height: 38px ;
         }
       }
       /* .layui-form-item-password{
