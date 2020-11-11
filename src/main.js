@@ -47,7 +47,7 @@ import {
     TabPane,
     Dialog,
     Form,
-    FormItem
+    FormItem,
     Input,
     Message,
 } from 'element-ui';
