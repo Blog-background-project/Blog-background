@@ -42,8 +42,8 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">123</div>
-                  <div>用户访问量</div>
+                  <div class="grid-num">{{ article.length }}</div>
+                  <div>文章数量</div>
                 </div>
               </div>
             </el-card>
@@ -54,7 +54,7 @@
                 <i class="el-icon-bell grid-con-icon"></i>
                 <div class="grid-cont-right">
                   <div class="grid-num">123</div>
-                  <div>系统消息</div>
+                  <div>评论总数</div>
                 </div>
               </div>
             </el-card>
@@ -64,8 +64,8 @@
               <div class="grid-content grid-con-3">
                 <i class="el-icon-shopping-bag-1 grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">123</div>
-                  <div>总数</div>
+                  <div class="grid-num">{{ tagList.leng }}</div>
+                  <div>标签总数</div>
                 </div>
               </div>
             </el-card>
@@ -81,9 +81,15 @@
         </div>
         <el-card shadow="hover">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="全部文章(10)" name="first"
-              >全部文章</el-tab-pane
-            >
+            <el-tab-pane label="全部文章(10)" name="first">
+              <el-table
+                :data="article"
+                :show-header="false"
+                style="width: 100%"
+              >
+                <el-table-column> </el-table-column>
+              </el-table>
+            </el-tab-pane>
             <el-tab-pane label="公开(2)" name="second">公开</el-tab-pane>
             <el-tab-pane label="草稿(3)" name="third">草稿</el-tab-pane>
             <el-tab-pane label="审核(5)" name="fourth">审核</el-tab-pane>
@@ -170,13 +176,31 @@ export default {
         ],
       },
       // 用户信息数据
+      userInfo: {},
       obj: {
-        username: "用户名",
+        username: "2506377990",
         targetUserid: 1,
         formSource: "web",
-        "usertoken": "鉴权token"
+        usertoken: "鉴权token",
       },
-      userInfo: {},
+      // 文章列表
+      article: [],
+      obj2: {
+        cate: 0,
+        formSource: "web",
+        pageNo: 1,
+        username: "2506377990",
+        usertoken: "8c60acc74434239b9bacfc0b8b0c6f6b",
+        pageSize: 10,
+      },
+      // 评论总数
+
+      // 标签列表
+      tagList: [],
+      obj3: {
+        username: "2506377990",
+        usertoken: "f06cacd705e454e4d103404be0b0ba46",
+      },
     };
   },
   components: {
@@ -184,6 +208,8 @@ export default {
   },
   mounted() {
     this.getQryUserInfo();
+    this.getQryArticle();
+    this.getQryTag();
   },
   methods: {
     // 点击切换tab栏
@@ -192,7 +218,18 @@ export default {
     },
     // 查询用户信息
     async getQryUserInfo() {
-      let result = await this.$API.reqQryUserInfo();
+      let result = await this.$API.reqQryUserInfo(this.obj);
+      this.userInfo = result.resultData;
+    },
+    // 文章数量
+    async getQryArticle() {
+      let result = await this.$API.reqQryArticle(this.obj2);
+      this.article = result.resultData;
+    },
+    // 标签总数
+    async getQryTag() {
+      let result = await this.$API.reqQryTag(this.obj3);
+      this.tagList = result.resultData;
     },
   },
 };
