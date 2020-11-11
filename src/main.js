@@ -25,6 +25,10 @@ import {
     Checkbox,
     Option,
     Input,
+    Form,
+    FormItem,
+    CheckboxGroup,
+    CheckboxButton,
 } from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -35,7 +39,9 @@ Vue.use(Col)
 Vue.use(Progress)
 Vue.use(Avatar)
 Vue.use(Option)
-
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(CheckboxGroup);
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
@@ -43,7 +49,7 @@ Vue.use(Tooltip)
 Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
-
+Vue.use(CheckboxButton);
 Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)

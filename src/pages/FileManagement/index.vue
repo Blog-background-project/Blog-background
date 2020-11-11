@@ -1,50 +1,54 @@
 <template>
   <div class="FMContainer">
-    <el-card class="box-card" style="font-size: 16px">
-      搜索：分类
-      <el-select placeholder="请选择" style="margin: 0 20px" size="small">
-        <el-option
-          v-for="item in qryCategory"
-          :key="item.cateID"
-          :label="item.cateName"
-          :value="item"
-          v-model="cateName"
-        >
-        </el-option>
-      </el-select>
-      类型
-      <el-select placeholder="请选择" style="margin-right: 20px" size="small">
-        <!-- <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option> -->
-      </el-select>
-
-      <el-checkbox style="margin-right: 20px">置顶</el-checkbox>
-
-      <el-select
-        size="small"
-        multiple
-        filterable
-        remote
-        reserve-keyword
-        placeholder="请输入关键词"
-        style="margin-right: 20px"
+    <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
+      <i
+        class="el-icon-document-copy"
+        style="font-size: 30px; margin-bottom: 20px"
+        >文章管理</i
       >
-        <!-- <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option> -->
-      </el-select>
 
-      <el-button type="primary" size="mini">提交</el-button>
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="搜索：分类">
+          <el-select
+            v-model="formInline.cate"
+            size="small"
+            placeholder="分类"
+          >
+            <el-option
+              v-for="(item) in qryCategory"
+              :key="item.cateID"
+              :label="item.cateName"
+              :value="item.cateID"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="类型">
+          <el-select
+            v-model="formInline.type"
+            size="small"
+            placeholder="类型"
+          >
+            <el-option label="区域一" value="shanghai"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-checkbox-group v-model="formInline.pageNo">
+            <el-checkbox label="置顶" name="type"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+
+        <el-form-item>
+          <el-input v-model="formInline.title" size="small"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" size="small">提交</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
+
     <el-card>
       <el-table style="width: 100%" border stripe>
         <el-table-column type="index" label="ID" width="60"> </el-table-column>
@@ -79,10 +83,13 @@ export default {
   name: "FileManagement",
   data() {
     return {
-      qryCategory:{
-        qryCategoryItem:""
+      qryCategory: [],
+      formInline: {
+        cate: "",//分类
+        type: "",//类型
+        pageNo:"",//是否置顶
+        title:"",//输入内容
       },
-      cateName:""
     };
   },
   mounted() {
@@ -94,12 +101,12 @@ export default {
       // 从 Cookies 当中取出用户名和 usertoken
       // const str = Response.Cookies["username"].Value.ToString();
 
-      let data = {}
+      let data = {};
       data.username = "2506377990";
-      data.usertoken = "24d1e207600980760e3297e6db20e970";
+      data.usertoken = "c92455c2713e1a9cceb320a0828c2e7e";
       // 发送请求获取文章所有分类
       const result = await this.$API.reqQryCategory(data);
-      this.qryCategory = result.resultData
+      this.qryCategory = result.resultData;
     },
   },
 };
