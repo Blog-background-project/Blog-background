@@ -1,12 +1,28 @@
 import Vue from 'vue'
 import App from './App.vue'
+import md5 from 'js-md5'
+
+import VueQuillEditor from 'vue-quill-editor'
+
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+
+Vue.use(VueQuillEditor)
 
 Vue.config.productionTip = false
 
+
 //引入element-ui
+import {Button, Select, DatePicker, TimePicker, Switch} from 'element-ui';
+//注册element组件
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
+
 import {
-    Button,
-    Select,
     Dropdown,
     DropdownMenu,
     DropdownItem,
@@ -29,10 +45,16 @@ import {
     FormItem,
     CheckboxGroup,
     CheckboxButton,
+    Popover,
+    Popconfirm,
+    Breadcrumb,
+    BreadcrumbItem,
+    Tabs,
+    TabPane,
+    Dialog,
+    Message,
 } from 'element-ui';
 //注册element组件
-Vue.use(Button)
-Vue.use(Select)
 Vue.use(Card)
 Vue.use(Row)
 Vue.use(Col)
@@ -55,6 +77,16 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Input);
+Vue.use(Popover);
+Vue.use(Popconfirm);
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Dialog)
+Vue.use(Form)
+Vue.use(FormItem)
+
 
 //引入路由器
 import router from "@/router"
@@ -77,6 +109,10 @@ new Vue({
         Vue.prototype.$API = API
         //全局事件总线
         Vue.prototype.$Bus = this
+        // 全局md5加密
+        Vue.prototype.$md5 = md5;
+        //message框
+        Vue.prototype.$message = Message;
     },
     render: h => h(App),
     router,

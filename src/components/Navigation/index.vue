@@ -64,7 +64,7 @@ export default {
         },
         {
           icon: 'el-icon-edit',
-          index: 'dashboard',
+          index: 'articles',
           title: '新建文章'
         },
         {
@@ -79,7 +79,7 @@ export default {
         },
         {
           icon: 'el-icon-s-grid',
-          index: '3',
+          index: 'tagpage',
           title: '标签管理',
         },
         {

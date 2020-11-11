@@ -15,14 +15,14 @@ export default {
   name: "App",
   data() {
     return {
-      collapse: false
-    }
+      collapse: false,
+    };
   },
   created() {
-    this.$Bus.$on('collapse-content', msg => {
+    this.$Bus.$on("collapse-content", (msg) => {
       this.collapse = msg;
     });
-  }
+  },
 };
 </script>
 
@@ -39,8 +39,8 @@ export default {
     top: 70px;
     bottom: 0;
     padding-bottom: 30px;
-    -webkit-transition: left .3s ease-in-out;
-    transition: left .3s ease-in-out;
+    -webkit-transition: left 0.3s ease-in-out;
+    transition: left 0.3s ease-in-out;
     background: #f0f0f0;
 
     .content {
@@ -57,6 +57,4 @@ export default {
     }
   }
 }
-
-
 </style>
