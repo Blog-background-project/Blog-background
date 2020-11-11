@@ -4,7 +4,6 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 //引入element-ui
-import '../theme/index.css' //自定义主题
 import {
     Button,
     Select,
