@@ -36,7 +36,7 @@
                 cancel-button-text='不用了'
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="deleteTag(row.tagId)"
+                @confirm="deleteTag(row)"
                 :title="`确定删除' ${row.tagName} '吗？`"
             >
               <el-button slot="reference" class="el-icon-delete-solid" type="danger" size="mini" title="删除"></el-button>
@@ -88,12 +88,11 @@ export default {
   },
   methods: {
     //删除标签回调
-    async deleteTag(tagId) {
-      console.log(tagId)
-      this.deleTagParams.tagId = tagId
+    async deleteTag(item) {
+      this.deleTagParams.tagId = item.tagId
       let result = await this.$API.reqdDelTag(this.deleTagParams)
       if (result.resultDesc.errCode === 200) {
-        this.$massage
+        this.$message.success(`删除' ${item.tagName} 成功!'`)
         //重写发请求刷新列表
         this.getQryTag()
         return
