@@ -96,23 +96,22 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card shadow="hover">
-          <schart
+          <Schart
             ref="bar"
             class="schart"
             canvasId="bar"
             :options="options"
-          ></schart>
+          ></Schart>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card shadow="hover">
-          <schart
-          name:'ssdqef'
-            ref="bar"
+          <Schart
+            ref="line"
             class="schart"
             canvasId="line"
             :options="options2"
-          ></schart>
+          ></Schart>
         </el-card>
       </el-col>
     </el-row>
@@ -122,13 +121,11 @@
 <script>
 // 引入vue-schart
 import Schart from "vue-schart";
-// new Schart(canvasId, options);
 export default {
   name: "Home",
   data() {
     return {
       activeName: "first",
-
       options: {
         type: "bar",
         title: {
@@ -172,14 +169,30 @@ export default {
           },
         ],
       },
+      // 用户信息数据
+      obj: {
+        username: "用户名",
+        targetUserid: 1,
+        formSource: "web",
+        "usertoken": "鉴权token"
+      },
+      userInfo: {},
     };
   },
-  compnents: {
+  components: {
     Schart,
   },
+  mounted() {
+    this.getQryUserInfo();
+  },
   methods: {
+    // 点击切换tab栏
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    // 查询用户信息
+    async getQryUserInfo() {
+      let result = await this.$API.reqQryUserInfo();
     },
   },
 };
