@@ -26,10 +26,22 @@
             width="200">
         </el-table-column>
         <el-table-column
-            property="name"
             width="200"
             align="center"
             label="操作">
+
+          <template slot-scope="{ row }">
+            <el-popconfirm
+                confirm-button-text='好的'
+                cancel-button-text='不用了'
+                icon="el-icon-info"
+                icon-color="red"
+                @confirm="deleteTag(row.tagId)"
+                :title="`确定删除' ${row.tagName} '吗？`"
+            >
+              <el-button slot="reference" class="el-icon-delete-solid" type="danger" size="mini" title="删除"></el-button>
+            </el-popconfirm>
+          </template>
         </el-table-column>
       </el-table>
       <el-dialog title="添加标签" :visible.sync="dialogFormVisible" width="400px">
@@ -62,6 +74,11 @@ export default {
         name: "",
         alias: "",
         // usertoken: "鉴权token"
+      },
+      deleTagParams: {
+        username: "2506377990",
+        tagId: "",//标签ID
+        // "usertoken": "鉴权token"
       }
     }
   },
@@ -70,6 +87,18 @@ export default {
     this.getQryTag()
   },
   methods: {
+    //删除标签回调
+    async deleteTag(tagId) {
+      console.log(tagId)
+      this.deleTagParams.tagId = tagId
+      let result = await this.$API.reqdDelTag(this.deleTagParams)
+      if (result.resultDesc.errCode === 200) {
+        this.$massage
+        //重写发请求刷新列表
+        this.getQryTag()
+        return
+      }
+    },
     //添加标签的回调
     async addTag() {
       let result = await this.$API.reqAddTag(this.addTagParams)
@@ -91,10 +120,6 @@ export default {
         this.tagList = result.resultData
       }
     },
-    //  获取文章列表
-    async getQryArticle() {
-      let result = await this.$API.reqQryArticle()
-    }
   }
 }
 </script>
@@ -103,7 +128,7 @@ export default {
 .tagpageContainer {
   /deep/ .el-card {
     .el-card__body {
-      .el-button {
+      & > .el-button {
         margin-bottom: 20px;
       }
     }
