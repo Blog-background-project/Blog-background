@@ -1,5 +1,5 @@
 <template>
-  <div class="FMContainer">
+  <div>
     <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
       <i
         class="el-icon-document-copy"
@@ -9,13 +9,9 @@
 
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="搜索：分类">
-          <el-select
-            v-model="formInline.cate"
-            size="small"
-            placeholder="分类"
-          >
+          <el-select v-model="formInline.cate" size="small" placeholder="分类">
             <el-option
-              v-for="(item) in qryCategory"
+              v-for="item in qryCategory"
               :key="item.cateID"
               :label="item.cateName"
               :value="item.cateID"
@@ -24,11 +20,7 @@
         </el-form-item>
 
         <el-form-item label="类型">
-          <el-select
-            v-model="formInline.type"
-            size="small"
-            placeholder="类型"
-          >
+          <el-select v-model="formInline.type" size="small" placeholder="类型">
             <el-option label="区域一" value="shanghai"></el-option>
           </el-select>
         </el-form-item>
@@ -54,17 +46,17 @@
         <el-table-column type="index" label="ID" width="60"> </el-table-column>
         <el-table-column prop="prop" label="分类" width="100">
         </el-table-column>
-        <el-table-column prop="prop" label="作者" width="width">
+        <el-table-column prop="prop" label="作者" width="100">
         </el-table-column>
         <el-table-column prop="prop" label="标题" width="width">
         </el-table-column>
-        <el-table-column prop="prop" label="日期" width="width">
+        <el-table-column prop="prop" label="日期" width="160">
         </el-table-column>
-        <el-table-column prop="prop" label="评论" width="width">
+        <el-table-column prop="prop" label="评论" width="80">
         </el-table-column>
-        <el-table-column prop="prop" label="状态" width="width">
+        <el-table-column prop="prop" label="状态" width="80">
         </el-table-column>
-        <el-table-column prop="prop" label="操作" width="width">
+        <el-table-column prop="prop" label="操作" width="80">
         </el-table-column>
       </el-table>
       <el-pagination
@@ -85,10 +77,10 @@ export default {
     return {
       qryCategory: [],
       formInline: {
-        cate: "",//分类
-        type: "",//类型
-        pageNo:"",//是否置顶
-        title:"",//输入内容
+        cate: "", //分类
+        type: "", //类型
+        pageNo: false, //是否置顶
+        title: "", //输入内容
       },
     };
   },
@@ -113,8 +105,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.FMContainer {
-  width: 100%;
-  height: 100%;
-}
+
 </style>
