@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import md5 from 'js-md5'
 
 import VueQuillEditor from 'vue-quill-editor'
 
@@ -10,6 +11,7 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 Vue.use(VueQuillEditor)
 
 Vue.config.productionTip = false
+
 
 //引入element-ui
 import { Button, Select, DatePicker, TimePicker, Switch } from 'element-ui';
@@ -95,6 +97,8 @@ new Vue({
         Vue.prototype.$API = API
         //全局事件总线
         Vue.prototype.$Bus = this
+        // 全局md5加密
+        Vue.prototype.$md5 = md5;
     },
     render: h => h(App),
     router,
