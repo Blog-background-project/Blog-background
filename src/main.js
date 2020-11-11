@@ -23,7 +23,10 @@ import {
     TableColumn,
     Table,
     Checkbox,
-    Input,
+    Breadcrumb,
+    BreadcrumbItem,
+    Tabs,
+    TabPane,
 } from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -46,7 +49,13 @@ Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
-Vue.use(Input);
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Tabs)
+Vue.use(TabPane)
+
+
+
 
 //引入路由器
 import router from "@/router"
