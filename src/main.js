@@ -4,7 +4,6 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 //引入element-ui
-import '../theme/index.css' //自定义主题
 import {
     Button,
     Select,
@@ -24,7 +23,8 @@ import {
     TableColumn,
     Table,
     Checkbox,
-    Option
+    Option,
+    Input,
 } from 'element-ui';
 //注册element组件
 Vue.use(Button)
@@ -48,8 +48,7 @@ Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
-
-
+Vue.use(Input);
 
 //引入路由器
 import router from "@/router"
