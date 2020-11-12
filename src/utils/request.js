@@ -31,7 +31,6 @@ instance.interceptors.response.use((value) => {
         _Message.error(value.data.resultDesc.errMsg)
         if (value.data.resultDesc.errCode
             === -106) {
-            console.log(value.data.resultDesc.errCode)
             sessionStorage.removeItem("OPENTOKEN_KEY")
             sessionStorage.removeItem("OPENTUSERNAME_KEY")
 
