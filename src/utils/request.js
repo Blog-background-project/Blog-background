@@ -3,6 +3,8 @@ import {Message} from "element-ui"
 
 //引入store
 import store from "@/store"
+//引入router
+import router from "@/router"
 
 let _Message = Message
 let instance = Axios.create({
@@ -25,7 +27,10 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use((value) => {
     //统一处理响应回来的错误
     if (value.data.resultDesc.errCode === 200) return value.data
-    else _Message.error(value.data.resultDesc.errMsg)
+    else {
+        _Message.error(value.data.resultDesc.errMsg)
+        router.replace("/login")
+    }
 }, (error) => {
     return Promise.reject(error)
 })
