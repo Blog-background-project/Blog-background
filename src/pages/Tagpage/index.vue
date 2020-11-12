@@ -70,15 +70,11 @@ export default {
       dialogFormVisible: false,
       tagList: [],
       addTagParams: {
-        username: "2506377990",
         name: "",
         alias: "",
-        // usertoken: "鉴权token"
       },
       deleTagParams: {
-        username: "2506377990",
         tagId: "",//标签ID
-        // "usertoken": "鉴权token"
       }
     }
   },
@@ -111,9 +107,7 @@ export default {
     },
     //获取标签列表函数
     async getQryTag() {
-      let result = await this.$API.reqQryTag({
-        "username": "2506377990",
-      })
+      let result = await this.$API.reqQryTag({})
       // "usertoken": "鉴权token"
       if (result.resultDesc.errCode === 200) {
         this.tagList = result.resultData
