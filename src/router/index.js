@@ -4,7 +4,11 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter)
 import routes from "./modules"
 
-export default new VueRouter({
+
+let router = new VueRouter({
     mode: "hash",
     routes
 })
+
+export default router
+

@@ -1,7 +1,8 @@
 import Login from '@/pages/Login'
+
 export default [
     {
-        path:'/login',
-        component:Login
+        path: '/login',
+        component: Login,
     }
 ]

@@ -14,7 +14,7 @@ export default [
      ...lvpengchao,
     {
         path: "",
-        redirect: "/home"
+        redirect: "/login"
     }
 
 ]

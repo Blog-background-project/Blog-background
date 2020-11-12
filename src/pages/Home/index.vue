@@ -42,7 +42,7 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{ article.length }}</div>
+                  <div class="grid-num">123</div>
                   <div>文章数量</div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
               <div class="grid-content grid-con-3">
                 <i class="el-icon-shopping-bag-1 grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{ tagList.leng }}</div>
+                  <div class="grid-num">{{ }}</div>
                   <div>标签总数</div>
                 </div>
               </div>
@@ -75,24 +75,27 @@
         <div class="crumbs">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item
-              ><i class="el-icon-document"></i> 文章管理</el-breadcrumb-item
+              ><i class="el-icon-document"></i>分类管理</el-breadcrumb-item
             >
           </el-breadcrumb>
         </div>
         <el-card shadow="hover">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="全部文章(10)" name="first">
+            <el-tab-pane label="博客大全(10)" name="first">
               <el-table
                 :data="article"
                 :show-header="false"
+                stripe
                 style="width: 100%"
               >
-                <el-table-column> </el-table-column>
+                <el-table-column>12113</el-table-column>
+                <el-table-column>12113</el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="公开(2)" name="second">公开</el-tab-pane>
-            <el-tab-pane label="草稿(3)" name="third">草稿</el-tab-pane>
-            <el-tab-pane label="审核(5)" name="fourth">审核</el-tab-pane>
+            <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
+            <el-tab-pane label="资源教程(3)" name="third"></el-tab-pane>
+            <el-tab-pane label="网址导航(5)" name="fourth"></el-tab-pane>
+            <el-tab-pane label="官方动态(5)" name="fifth"></el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
@@ -214,7 +217,7 @@ export default {
   methods: {
     // 点击切换tab栏
     handleClick(tab, event) {
-      console.log(tab, event);
+      // console.log(tab, event);
     },
     // 查询用户信息
     async getQryUserInfo() {
@@ -228,7 +231,7 @@ export default {
     },
     // 标签总数
     async getQryTag() {
-      let result = await this.$API.reqQryTag(this.obj3);
+      let result = await this.$API.reqQryTag();
       this.tagList = result.resultData;
     },
   },
