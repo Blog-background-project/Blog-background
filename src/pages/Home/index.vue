@@ -42,7 +42,7 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">123</div>
+                  <div class="grid-num">{{ article.length }}</div>
                   <div>文章数量</div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
               <div class="grid-content grid-con-3">
                 <i class="el-icon-shopping-bag-1 grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{ }}</div>
+                  <div class="grid-num">{{ tagList.length }}</div>
                   <div>标签总数</div>
                 </div>
               </div>
@@ -79,8 +79,8 @@
             >
           </el-breadcrumb>
         </div>
-        <el-card shadow="hover">
-          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-card shadow="hover" class="card-bottom">
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick" >
             <el-tab-pane label="博客大全(10)" name="first">
               <el-table
                 :data="article"
@@ -181,10 +181,8 @@ export default {
       // 用户信息数据
       userInfo: {},
       obj: {
-        username: "2506377990",
         targetUserid: 1,
         formSource: "web",
-        usertoken: "鉴权token",
       },
       // 文章列表
       article: [],
@@ -192,8 +190,8 @@ export default {
         cate: 0,
         formSource: "web",
         pageNo: 1,
-        username: "2506377990",
-        usertoken: "8c60acc74434239b9bacfc0b8b0c6f6b",
+        // username: "2506377990",
+        // usertoken: "8c60acc74434239b9bacfc0b8b0c6f6b",
         pageSize: 10,
       },
       // 评论总数
@@ -201,8 +199,8 @@ export default {
       // 标签列表
       tagList: [],
       obj3: {
-        username: "2506377990",
-        usertoken: "f06cacd705e454e4d103404be0b0ba46",
+        // username: "2506377990",
+        // usertoken: "445a319ebbce6fe37b026794eeab529f",
       },
     };
   },
@@ -210,7 +208,7 @@ export default {
     Schart,
   },
   mounted() {
-    this.getQryUserInfo();
+    // this.getQryUserInfo();
     this.getQryArticle();
     this.getQryTag();
   },
@@ -224,6 +222,7 @@ export default {
       let result = await this.$API.reqQryUserInfo(this.obj);
       this.userInfo = result.resultData;
     },
+
     // 文章数量
     async getQryArticle() {
       let result = await this.$API.reqQryArticle(this.obj2);
@@ -231,7 +230,7 @@ export default {
     },
     // 标签总数
     async getQryTag() {
-      let result = await this.$API.reqQryTag();
+      let result = await this.$API.reqQryTag(this.obj3);
       this.tagList = result.resultData;
     },
   },
@@ -337,9 +336,15 @@ export default {
     font-size: 30px;
   }
 }
+
+.card-bottom{
+  height: 410px;
+}
 // schart 图
 .schart {
   width: 100%;
   height: 300px;
 }
+
+
 </style>
