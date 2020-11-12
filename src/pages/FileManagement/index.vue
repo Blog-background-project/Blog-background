@@ -100,34 +100,17 @@
       </el-pagination>
     </el-card>
 
-    <el-card v-show="checkout">
-      <span style="font-size: 16px">标题</span>
-
-      <el-form :model="form" label-width="80px">
-        <el-form-item>
-          <el-input v-model="model"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>
-      </el-form>
-    </el-card>
+    <Editor v-show="checkout"></Editor>
   </div>
 </template>
 
 <script>
+import Editor from "./Editor";
 export default {
   name: "FileManagement",
+  components: {
+    Editor,
+  },
   data() {
     return {
       // 分类列表
@@ -139,18 +122,12 @@ export default {
         pageNo: "", //类型
         title: "", //输入内容
       },
-      // 用户数据
-      userInfo: {
-        username: "2506377990",
-        usertoken: "f788c103be4c18c50f0d52e54a010b0c",
-      },
       // 文章列表
       qryArticle: [],
       // 是否显示文章详情页
       checkout: true,
       // 图片
       imageUrl: "",
-      form: {},
     };
   },
   mounted() {
@@ -160,23 +137,6 @@ export default {
     this.getQryCategory();
   },
   methods: {
-    // 上传图片
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-
     // 获取文章所有分类
     async getQryCategory() {
       // 发送请求获取文章所有分类
