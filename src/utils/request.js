@@ -30,8 +30,7 @@ instance.interceptors.response.use((value) => {
     else {
         _Message.error(value.data.resultDesc.errMsg)
         if (value.data.resultDesc.errCode
-            === -105) {
-            console.log(value.data.resultDesc.errCode)
+            === -106) {
             sessionStorage.removeItem("OPENTOKEN_KEY")
             sessionStorage.removeItem("OPENTUSERNAME_KEY")
 
