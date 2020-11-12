@@ -14,7 +14,7 @@ Vue.config.productionTip = false
 
 
 //引入element-ui
-import {Button, Select, DatePicker, TimePicker, Switch} from 'element-ui';
+import { Button, Select, DatePicker, TimePicker, Switch } from 'element-ui';
 //注册element组件
 Vue.use(Button)
 Vue.use(Select)
@@ -50,6 +50,8 @@ import {
     FormItem,
     Input,
     Message,
+    MessageBox,
+    Option,
 } from 'element-ui';
 //注册element组件
 Vue.use(Card)
@@ -80,7 +82,11 @@ Vue.use(TabPane)
 Vue.use(Dialog)
 Vue.use(Form)
 Vue.use(FormItem)
-
+Vue.use(Option);
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
 
 //引入路由器
 import router from "@/router"
