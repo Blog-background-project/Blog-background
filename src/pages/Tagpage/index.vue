@@ -2,7 +2,7 @@
   <div class="tagpageContainer">
 
     <el-card>
-      <el-button type="primary" size="small" @click="dialogFormVisible = true">添加标签</el-button>
+      <el-button type="primary" size="small" @click="addTagClick">添加标签</el-button>
       <el-table
           :data="tagList"
           ref="singleTable"
@@ -83,6 +83,12 @@ export default {
     this.getQryTag()
   },
   methods: {
+    //添加标签弹出框回调
+    addTagClick() {
+      this.addTagParams.name = ""
+      this.addTagParams.alias = ""
+      this.dialogFormVisible = true
+    },
     //删除标签回调
     async deleteTag(item) {
       this.deleTagParams.tagId = item.tagId
@@ -98,7 +104,6 @@ export default {
     async addTag() {
       let result = await this.$API.reqAddTag(this.addTagParams)
       if (result.resultDesc.errCode === 200) {
-        this.tagList = result.resultData
         this.dialogFormVisible = false
         //重写发请求刷新列表
         this.getQryTag()
