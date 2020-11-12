@@ -64,12 +64,11 @@
         <el-table-column prop="title" label="标题" width="width">
         </el-table-column>
         <el-table-column
-          prop="prop"
+          prop="time"
           label="日期"
           width="width"
           cell-click="sorting"
         >
-          <template slot-scope="{ row, $index }"> </template>
         </el-table-column>
         <el-table-column prop="commNums" label="评论" width="80">
         </el-table-column>
@@ -210,8 +209,12 @@ export default {
           this.qryArticle.forEach((item) => {
             this.timeList.push(item.posttime);
           });
-          for (let index = 0; index < this.timeList.length; index++) {
-            this.qryArticle[index].time = this.timeList[index]
+          let time = []
+          this.timeList.forEach((item)=>{
+            time.push(this.timestampToTime(item))
+          })
+          for (let index = 0; index < time.length; index++) {
+            this.qryArticle[index].time = time[index];
           }
         });
       },
