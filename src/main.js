@@ -13,6 +13,8 @@ Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 
+
+//注册element组件
 import {
     Button,
     Select,
@@ -49,9 +51,17 @@ import {
     TabPane,
     Dialog,
     Message,
-    Upload
+    Upload,
+    MessageBox,
+    Option,
 } from 'element-ui';
+
 //注册element组件
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
 Vue.use(Card)
 Vue.use(Upload)
 Vue.use(Row)
@@ -90,6 +100,11 @@ Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Switch)
 
+Vue.use(Option);
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
 
 //引入路由器
 import router from "@/router"

@@ -12,7 +12,41 @@
           <el-button type="primary">搜索</el-button>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary">添加</el-button>
+          <el-button type="primary" @click="dialogFormVisible = true"
+            >添加</el-button
+          >
+          <el-dialog title="分类编辑 " :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+              <el-form-item label="名称" :label-width="formLabelWidth">
+                <el-input
+                  v-model="form.categoryName"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="别名" :label-width="formLabelWidth">
+                <el-input
+                  v-model="form.cateAlias"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="排序" :label-width="formLabelWidth">
+                <el-input v-model="form.order" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="父分类" :label-width="formLabelWidth">
+                <el-select v-model="form.region" placeholder="无">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="addDialogAction"
+                >确 定</el-button
+              >
+              <!-- dialogFormVisible = false -->
+            </div>
+          </el-dialog>
         </el-col>
       </el-row>
     </div>
@@ -81,6 +115,7 @@
 </template>
 
 <script>
+import { MessageBox } from "element-ui";
 export default {
   name: "Categorylist",
   data() {
@@ -91,6 +126,20 @@ export default {
       total: 0,
       value: false, // value用来当只有一页时隐藏分页
       categoryInfo: [],
+      // dialog表单
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        categoryName: "", //名称
+        cateAlias: "", //别名
+        order: 0, //排名
+        region: "",
+        // delivery: false,
+        // type: [],
+        // resource: "",
+        // desc: "",
+      },
+      formLabelWidth: "120px",
     };
   },
   mounted() {
@@ -122,6 +171,26 @@ export default {
         this.categoryInfo = result.resultData;
         this.total = result.resultData.length;
         console.log(page, limit);
+      }
+    },
+
+    // dialog点击添加或修改的逻辑
+    async addDialogAction(data) {
+      // 获取参数
+      let formList = this.form;
+      // 整理参数
+      // 发请求
+      let result = await this.$API.reqAddCategory({ data });
+      console.log(result);
+      if (result.resultDesc.errCode === 200) {
+        // 成功
+        // 提示添加成功
+        // this.$message.success(`${formLis}`)
+        this.$message.success("添加成功");
+      } else {
+        // 失败
+        // 请求失败
+        this.$message.success("添加失败");
       }
     },
   },
