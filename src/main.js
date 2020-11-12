@@ -53,7 +53,6 @@ import {
     Message,
     Upload,
     MessageBox,
-    Option,
 } from 'element-ui';
 
 //注册element组件
@@ -101,6 +100,7 @@ Vue.use(TimePicker)
 Vue.use(Switch)
 
 Vue.use(Option);
+
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;

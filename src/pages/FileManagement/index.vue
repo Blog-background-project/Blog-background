@@ -6,10 +6,7 @@
       >文章管理</i
     >
     <div v-if="checkout">
-      <el-card
-        class="box-card"
-        style="font-size: 16px; margin-bottom: 20px"
-      >
+      <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="搜索：分类">
             <el-select
@@ -67,14 +64,7 @@
           </el-table-column>
           <el-table-column prop="title" label="标题" width="width">
           </el-table-column>
-          <el-table-column
-            label="日期"
-            width="width"
-            cell-click="sorting"
-          >
-          <template slot-scope="{row,$index}">
-           <p>{{row.time}}</p>
-          </template>
+          <el-table-column prop="time" label="日期" width="width" cell-click="sorting">
           </el-table-column>
           <el-table-column prop="commNums" label="评论" width="80">
           </el-table-column>
@@ -89,7 +79,7 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="160">
             <template slot-scope="{ $index }">
-              <el-button type="primary" size="small">修改</el-button>
+              <el-button type="primary" size="small" @click="changeCheckout($index)">修改</el-button>
               <el-button type="danger" size="small" @click="deleteItem($index)"
                 >删除</el-button
               >
@@ -138,10 +128,7 @@ export default {
       qryArticle: [],
 
       // 是否显示文章详情页
-      checkout: true,
-
-      // 时间
-      timeList: [],
+      checkout: false,
     };
   },
   mounted() {
@@ -151,6 +138,11 @@ export default {
     this.getQryCategory();
   },
   methods: {
+    // 修改
+    changeCheckout(index){
+      this.checkout = !this.checkout
+    },
+
     // 获取文章所有分类
     async getQryCategory() {
       let dataInfo = {};
@@ -161,14 +153,32 @@ export default {
 
     // 获取文章列表
     async getQryArticle(cate = 0) {
+      // 整理数据发送请求
       let info = {};
       info.cate = cate;
       info.pageNo = this.pageNo;
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
+      
+      // 储存数据到当前组件
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
-      
+
+      // 时间格式化
+      // 定义一个数组用来储存每个数据的 posttime
+      let timeListT = [];
+      result.resultData.forEach((item) => {
+        timeListT.push(item.posttime);
+      });
+      // 格式化时间
+      let time = [];
+      timeListT.forEach((item) => {
+        time.push(this.timestampToTime(item));
+      });
+      // 讲格式化好的数据储存到 qryArticle 中
+      for (let i = 0; i < this.qryArticle.length; i++) {
+        this.qryArticle[i].time = time[i];
+      }
     },
 
     // 根据分类获取数据
@@ -177,7 +187,7 @@ export default {
       this.getQryArticle(cate, pageNo);
     },
 
-    // 删除文章‘
+    // 删除文章
     async deleteItem(index) {
       let userInfo = {};
       userInfo.index = index;
@@ -209,26 +219,26 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-  watch: {
-    qryArticle: {
-      immediate: true,
-      handler() {
-        this.$nextTick(() => {
-          this.qryArticle.forEach((item) => {
-            this.timeList.push(item.posttime);
-          });
-          let time = []
-          this.timeList.forEach((item)=>{
-            time.push(this.timestampToTime(item))
-          })
-          console.log(time);
-          for (let i = 0; i < this.qryArticle.length; i++) {
-            this.qryArticle[i].time = time[i]
-          }
-        });
-      },
-    },
-  },
+  // watch: {
+  //   qryArticle: {
+  //     immediate: true,
+  //     handler() {
+  //       this.$nextTick(() => {
+  //         this.qryArticle.forEach((item) => {
+  //           this.timeList.push(item.posttime);
+  //         });
+  //         let time = [];
+  //         this.timeList.forEach((item) => {
+  //           time.push(this.timestampToTime(item));
+  //         });
+  //         // console.log(time);
+  //         for (let i = 0; i < this.qryArticle.length; i++) {
+  //           this.qryArticle[i].time = time[i];
+  //         }
+  //       });
+  //     },
+  //   },
+  // },
 };
 </script>
 
