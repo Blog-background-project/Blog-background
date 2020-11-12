@@ -92,10 +92,10 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        :page-size="20"
-        :pager-count="11"
+        :page-size="pageSize"
+        :pager-count="pageNo"
         layout="prev, pager, next"
-        :total="1000"
+        :total="total"
       >
       </el-pagination>
     </el-card>
@@ -115,6 +115,12 @@ export default {
     return {
       // 分类列表
       qryCategory: [],
+      // 每页个数
+      pageSize: 10,
+      // 页数
+      pageNo: 1,
+      // 总数
+      total: 20,
       // 收集数据
       formInline: {
         cate: "", //分类
@@ -122,12 +128,15 @@ export default {
         pageNo: "", //类型
         title: "", //输入内容
       },
+
       // 文章列表
       qryArticle: [],
+
       // 是否显示文章详情页
-      checkout: true,
-      // 图片
-      imageUrl: "",
+      checkout: false,
+
+      // 时间
+      timeList: [],
     };
   },
   mounted() {
@@ -139,30 +148,26 @@ export default {
   methods: {
     // 获取文章所有分类
     async getQryCategory() {
+      let dataInfo = {};
       // 发送请求获取文章所有分类
-      const result = await this.$API.reqQryCategory(this.userInfo);
+      const result = await this.$API.reqQryCategory(dataInfo);
       this.qryCategory = result.resultData;
     },
 
     // 获取文章列表
-    async getQryArticle(cate = 0, pageSize = 10, pageNo = 1) {
-      let info = this.userInfo;
+    async getQryArticle(cate = 0) {
+      let info = {};
       info.cate = cate;
-      info.pageNo = pageNo;
-      info.pageSize = pageSize;
+      info.pageNo = this.pageNo;
+      info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
       this.qryArticle = result.resultData;
-      // let timeList = []
-      // for (let index = 0; index < result.resultData.length; index++) {
-      //   timeList.push(result.resultData[index])
-      // }
     },
 
     // 根据分类获取数据
     changeAjak() {
       let { cate, pageNo, title } = this.formInline;
       this.getQryArticle(cate, pageNo);
-      // console.log(this.timeList);
     },
 
     // 删除文章‘
@@ -197,31 +202,23 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
+  watch: {
+    qryArticle: {
+      immediate: true,
+      handler() {
+        this.$nextTick(() => {
+          this.qryArticle.forEach((item) => {
+            this.timeList.push(item.posttime);
+          });
+          for (let index = 0; index < this.timeList.length; index++) {
+            this.qryArticle[index].time = this.timeList[index]
+          }
+        });
+      },
+    },
+  },
 };
 </script>
 
 <style lang='less' scoped>
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
 </style>
