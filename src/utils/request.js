@@ -29,7 +29,16 @@ instance.interceptors.response.use((value) => {
     if (value.data.resultDesc.errCode === 200) return value.data
     else {
         _Message.error(value.data.resultDesc.errMsg)
-        router.replace("/login")
+        if (value.data.resultDesc.errCode
+            === -105) {
+            console.log(value.data.resultDesc.errCode)
+            sessionStorage.removeItem("OPENTOKEN_KEY")
+            sessionStorage.removeItem("OPENTUSERNAME_KEY")
+
+            localStorage.removeItem("OPENTOKEN_KEY")
+            localStorage.removeItem("OPENTUSERNAME_KEY")
+            router.replace("/login")
+        }
     }
 }, (error) => {
     return Promise.reject(error)
