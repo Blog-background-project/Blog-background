@@ -5,101 +5,107 @@
       style="font-size: 30px; margin-bottom: 20px"
       >文章管理</i
     >
-    <el-card
-      class="box-card"
-      style="font-size: 16px; margin-bottom: 20px"
-      v-show="!checkout"
-    >
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="搜索：分类">
-          <el-select v-model="formInline.cate" size="small" placeholder="分类">
-            <el-option label="任意" value="0"></el-option>
-            <el-option
-              v-for="item in qryCategory"
-              :key="item.cateID"
-              :label="item.cateName"
-              :value="item.cateID"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="类型">
-          <el-select
-            v-model="formInline.pageNo"
-            size="small"
-            placeholder="类型"
-          >
-            <el-option label="任意" value="0"></el-option>
-            <el-option label="公开" value="1"></el-option>
-            <el-option label="草稿" value="2"></el-option>
-            <el-option label="审核" value="3"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-checkbox-group v-model="formInline.type">
-            <el-checkbox label="置顶" name="type"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-
-        <el-form-item>
-          <el-input v-model="formInline.title" size="small"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" size="small" @click="changeAjak"
-            >提交</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </el-card>
-
-    <el-card v-show="!checkout">
-      <el-table :data="qryArticle" style="width: 100%" border stripe>
-        <el-table-column prop="id" label="ID" width="80"> </el-table-column>
-        <el-table-column prop="cateName" label="分类" width="120">
-        </el-table-column>
-        <el-table-column prop="author" label="作者" width="120">
-        </el-table-column>
-        <el-table-column prop="title" label="标题" width="width">
-        </el-table-column>
-        <el-table-column
-          prop="time"
-          label="日期"
-          width="width"
-          cell-click="sorting"
-        >
-        </el-table-column>
-        <el-table-column prop="commNums" label="评论" width="80">
-        </el-table-column>
-        <el-table-column prop="viewNums" label="阅读量" width="80">
-        </el-table-column>
-        <el-table-column prop="cover" label="状态" width="120">
-          <template slot-scope="{ row, $index }">
-            <p v-if="row.cover === '' || row.cover === 0">公开</p>
-            <p v-if="row.cover === 1">草稿</p>
-            <p v-if="row.cover === 2">审查</p>
-          </template>
-        </el-table-column>
-        <el-table-column prop="prop" label="操作" width="160">
-          <template slot-scope="{ row, $index }">
-            <el-button type="primary" size="small">修改</el-button>
-            <el-button type="danger" size="small" @click="deleteItem($index)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        :page-size="pageSize"
-        :pager-count="pageNo"
-        layout="prev, pager, next"
-        :total="total"
+    <div v-if="checkout">
+      <el-card
+        class="box-card"
+        style="font-size: 16px; margin-bottom: 20px"
       >
-      </el-pagination>
-    </el-card>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="搜索：分类">
+            <el-select
+              v-model="formInline.cate"
+              size="small"
+              placeholder="分类"
+            >
+              <el-option label="任意" value="0"></el-option>
+              <el-option
+                v-for="item in qryCategory"
+                :key="item.cateID"
+                :label="item.cateName"
+                :value="item.cateID"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
-    <Editor v-show="checkout"></Editor>
+          <el-form-item label="类型">
+            <el-select
+              v-model="formInline.pageNo"
+              size="small"
+              placeholder="类型"
+            >
+              <el-option label="任意" value="0"></el-option>
+              <el-option label="公开" value="1"></el-option>
+              <el-option label="草稿" value="2"></el-option>
+              <el-option label="审核" value="3"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-checkbox-group v-model="formInline.type">
+              <el-checkbox label="置顶" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+
+          <el-form-item>
+            <el-input v-model="formInline.title" size="small"></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" size="small" @click="changeAjak"
+              >提交</el-button
+            >
+          </el-form-item>
+        </el-form>
+      </el-card>
+
+      <el-card>
+        <el-table :data="qryArticle" style="width: 100%" border stripe>
+          <el-table-column prop="id" label="ID" width="80"> </el-table-column>
+          <el-table-column prop="cateName" label="分类" width="120">
+          </el-table-column>
+          <el-table-column prop="author" label="作者" width="120">
+          </el-table-column>
+          <el-table-column prop="title" label="标题" width="width">
+          </el-table-column>
+          <el-table-column
+            label="日期"
+            width="width"
+            cell-click="sorting"
+          >
+          <template slot-scope="{row,$index}">
+           <p>{{row.time}}</p>
+          </template>
+          </el-table-column>
+          <el-table-column prop="commNums" label="评论" width="80">
+          </el-table-column>
+          <el-table-column prop="viewNums" label="阅读量" width="80">
+          </el-table-column>
+          <el-table-column prop="cover" label="状态" width="120">
+            <template slot-scope="{ row, $index }">
+              <p v-if="row.cover === '' || row.cover === $index">公开</p>
+              <p v-if="row.cover === $index">草稿</p>
+              <p v-if="row.cover === $index">审查</p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="prop" label="操作" width="160">
+            <template slot-scope="{ $index }">
+              <el-button type="primary" size="small">修改</el-button>
+              <el-button type="danger" size="small" @click="deleteItem($index)"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          :page-size="pageSize"
+          layout="prev, pager, next"
+          :total="total"
+        >
+        </el-pagination>
+      </el-card>
+    </div>
+
+    <Editor v-else></Editor>
   </div>
 </template>
 
@@ -119,7 +125,7 @@ export default {
       // 页数
       pageNo: 1,
       // 总数
-      total: 20,
+      total: 0,
       // 收集数据
       formInline: {
         cate: "", //分类
@@ -132,7 +138,7 @@ export default {
       qryArticle: [],
 
       // 是否显示文章详情页
-      checkout: false,
+      checkout: true,
 
       // 时间
       timeList: [],
@@ -161,6 +167,8 @@ export default {
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
       this.qryArticle = result.resultData;
+      this.total = result.resultData.length;
+      
     },
 
     // 根据分类获取数据
@@ -171,7 +179,7 @@ export default {
 
     // 删除文章‘
     async deleteItem(index) {
-      let { userInfo } = this;
+      let userInfo = {};
       userInfo.index = index;
       const result = await this.$API.reqDelArticle(userInfo);
     },
@@ -213,8 +221,9 @@ export default {
           this.timeList.forEach((item)=>{
             time.push(this.timestampToTime(item))
           })
-          for (let index = 0; index < time.length; index++) {
-            this.qryArticle[index].time = time[index];
+          console.log(time);
+          for (let i = 0; i < this.qryArticle.length; i++) {
+            this.qryArticle[i].time = time[i]
           }
         });
       },
