@@ -104,18 +104,12 @@
         </el-pagination>
       </el-card>
     </div>
-
-    <Editor v-else></Editor>
   </div>
 </template>
 
 <script>
-import Editor from "./Editor";
 export default {
   name: "FileManagement",
-  components: {
-    Editor,
-  },
   data() {
     return {
       // 分类列表
