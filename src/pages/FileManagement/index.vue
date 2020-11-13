@@ -238,6 +238,7 @@ export default {
       let dataInfo = {};
       dataInfo.artId = row.id;
       const result = await this.$API.reqDelArticle(dataInfo);
+      this.getQryArticle()
     },
 
     // 格式化时间
