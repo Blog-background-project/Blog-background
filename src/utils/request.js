@@ -15,10 +15,13 @@ let instance = Axios.create({
 //请求拦截器
 instance.interceptors.request.use((config) => {
     //处理登陆后token携带问题
-    if (store.state.Login.token) {
-        config.data.username = store.state.Login.username
-        config.data.token = store.state.Login.token
-        config.data.usertoken = store.state.Login.token
+    if (store.state.Login.userInfo.userName) {
+        //当用户是登陆状态 则每次发送请求 都携带 username和token
+        config.data = {
+            username: store.state.Login.userInfo.userName,
+            usertoken: store.state.Login.userInfo.token,
+            token: store.state.Login.userInfo.token
+        }
     }
     return config
 })
@@ -31,16 +34,12 @@ instance.interceptors.response.use((value) => {
         _Message.error(value.data.resultDesc.errMsg)
         if (value.data.resultDesc.errCode
             === -106) {
-            sessionStorage.removeItem("OPENTOKEN_KEY")
-            sessionStorage.removeItem("OPENTUSERNAME_KEY")
-
-            localStorage.removeItem("OPENTOKEN_KEY")
-            localStorage.removeItem("OPENTUSERNAME_KEY")
+            //判断token 如果到期 则清掉本地用户信息
+            localStorage.removeItem("OPENUSERINFO_KEY") ? localStorage.removeItem("OPENUSERINFO_KEY") : sessionStorage.removeItem("OPENUSERINFO_KEY")
             router.replace("/login")
         }
     }
 }, (error) => {
     return Promise.reject(error)
 })
-
 export default instance
