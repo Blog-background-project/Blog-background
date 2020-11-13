@@ -3,8 +3,9 @@
     <i
       class="el-icon-document-copy"
       style="font-size: 30px; margin-bottom: 20px"
-      >文章管理</i
     >
+      文章管理
+    </i>
     <div v-if="checkout">
       <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -48,32 +49,28 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" size="small" @click="changeAjak"
-              >提交</el-button
-            >
+            <el-button type="primary" size="small" @click="changeAjak">
+              提交
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
 
       <el-card>
         <el-table :data="qryArticle" style="width: 100%" border stripe>
-          <el-table-column prop="id" label="ID" width="80"> </el-table-column>
+          <el-table-column prop="id" label="ID" sortable width="80">
+          </el-table-column>
           <el-table-column prop="cateName" label="分类" width="120">
           </el-table-column>
           <el-table-column prop="author" label="作者" width="120">
           </el-table-column>
           <el-table-column prop="title" label="标题" width="width">
           </el-table-column>
-          <el-table-column
-            prop="time"
-            label="日期"
-            width="width"
-            cell-click="sorting"
-          >
+          <el-table-column prop="time" label="日期" width="width" sortable>
           </el-table-column>
-          <el-table-column prop="commNums" label="评论" width="80">
+          <el-table-column prop="commNums" label="评论" sortable width="80">
           </el-table-column>
-          <el-table-column prop="viewNums" label="阅读量" width="80">
+          <el-table-column prop="viewNums" label="阅读量" sortable width="100">
           </el-table-column>
           <el-table-column prop="cover" label="状态" width="120">
             <template slot-scope="{ row, $index }">
@@ -97,6 +94,8 @@
           </el-table-column>
         </el-table>
         <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
           :page-size="pageSize"
           layout="prev, pager, next"
           :total="total"
@@ -115,7 +114,7 @@ export default {
       // 分类列表
       qryCategory: [],
       // 每页个数
-      pageSize: 10,
+      pageSize: 20,
       // 页数
       pageNo: 1,
       // 总数
@@ -142,6 +141,13 @@ export default {
     this.getQryCategory();
   },
   methods: {
+    // 分页
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
     // 修改
     changeCheckout(index) {
       this.checkout = !this.checkout;
@@ -168,21 +174,42 @@ export default {
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
 
+      this.formTime(result.resultData);
+      //#region
       // 时间格式化
       // 定义一个数组用来储存每个数据的 posttime
-      let timeListT = [];
-      result.resultData.forEach((item) => {
-        timeListT.push(item.posttime);
-      });
+      // let timeListT = [];
+      // result.resultData.forEach((item) => {
+      //   timeListT.push(item.posttime);
+      // });
       // 格式化时间
-      let time = [];
-      timeListT.forEach((item) => {
-        time.push(this.timestampToTime(item));
-      });
+      // let time = [];
+      // timeListT.forEach((item) => {
+      //   time.push(this.timestampToTime(item));
+      // });
       // 讲格式化好的数据储存到 qryArticle 中
-      for (let i = 0; i < this.qryArticle.length; i++) {
-        this.qryArticle[i].time = time[i];
-      }
+      // for (let i = 0; i < this.qryArticle.length; i++) {
+      //   this.qryArticle[i].time = time[i];
+      // }
+      //#endregion
+    },
+
+    // 格式化时间
+    formTime(List) {
+      let timeListT = [];
+      List.forEach((item) => {
+        item.time = this.timestampToTime(item.posttime);
+        // timeListT.push(this.timestampToTime(item.posttime))
+        // timeListT.push(item.posttime);
+      });
+
+      // let time = [];
+      // timeListT.forEach((item) => {
+      //   time.push(this.timestampToTime(item));
+      // });
+      // for (let i = 0; i < List.length; i++) {
+      //   List[i].time = timeListT[i];
+      // }
     },
 
     // 根据分类获取数据
@@ -199,9 +226,9 @@ export default {
     },
 
     // 排序
-    sorting() {
-      console.log(111);
-    },
+    // sorting() {
+    //   console.log(111);
+    // },
 
     // 格式化时间
     timestampToTime(timestamp) {
