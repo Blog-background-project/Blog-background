@@ -60,6 +60,7 @@
         <el-table
           :height="tableHeight"
           highlight-current-row
+          v-loading="loading"
           :data="qryArticle"
           style="width: 100%"
           border
@@ -111,8 +112,6 @@
             </template>
           </el-table-column>
         </el-table>
-        <p v-if="loading" style="">加载中...</p>
-        <!-- <p v-if="noMore">没有更多了</p> -->
       </el-card>
     </div>
   </div>

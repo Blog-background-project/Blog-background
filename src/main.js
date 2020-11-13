@@ -18,6 +18,7 @@ Vue.config.productionTip = false
 
 //注册element组件
 import {
+    Loading,
     Button,
     Select,
     DatePicker,
@@ -60,6 +61,7 @@ import {
 } from 'element-ui';
 
 //注册element组件
+Vue.use(Loading)
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(DatePicker)
