@@ -1,5 +1,5 @@
 <template>
-  <!--       大容器   背景图-->
+  <!--     大容器   背景图-->
   <div class="login-container">
     <!-- 登录区 -->
     <div class="userlogin">
@@ -16,30 +16,23 @@
           <label for="username" class="el-icon-s-custom"></label>
           <input
               type="text"
-              name="username"
+              id="username"
               class="username"
               placeholder="请以字母开头，用户名最少6位"
-              v-model="userName"
+              v-model="data.username"
           />
         </div>
         <!-- 密码 -->
         <div class="layui-form-item layui-form-item-password">
-          <label class="el-icon-goods" style="z-index: 10"></label>
+          <label for="password" class="el-icon-goods" style="z-index: 10"></label>
           <el-input
               placeholder="密码最少6位必须包含数字字母"
-              v-model="password"
+              v-model.trim="data.password"
               show-password
               class="password"
+              id="password"
           >
-            <label for="password" class="el-icon-goods"></label>
           </el-input>
-          <!-- <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="密码"
-            v-model="password"
-          /> -->
         </div>
         <!-- 验证码    -->
         <div class="layui-form-item layui-form-yj">
@@ -50,7 +43,6 @@
               id="vercode"
               placeholder="请输入验证码"
           />
-          <!-- <div class="captcha"></div> -->
         </div>
         <!-- 保持登录区 -->
         <div class="layui-form-item layui-form-item-check">
@@ -67,10 +59,7 @@
             <a href="javascripy:;">忘记密码？</a>
           </div>
         </div>
-        <div @click="changeLogin" class="layui-form-item userinfo-login">
-          <!-- <a href=""> 登 录</a> -->
-          登 录
-        </div>
+        <div @click="changeLogin" class="layui-form-item userinfo-login">登 录</div>
         <div class="layui-form-item layui-form-item-rigester">
           <a href="javascript:;">注册账号</a>
         </div>
@@ -80,30 +69,29 @@
 </template>
 
 <script>
-import {mapState} from "vuex"
-
 export default {
   name: "login",
   data() {
     return {
-      input: "",
-      userName: "",
-      password: "",
+      data: {
+        username: "",
+        password: "",
+      },
       checked: "",
     };
   },
   methods: {
     async changeLogin() {
-      let {userName, password} = this;
+      let {username, password} = this.data;
       // 手机号为空
-      if (!userName.trim()) {
+      if (!username.trim()) {
         // 提示用户
         this.$message.error("用户名不能为空");
         return;
       }
 
       // 密码为空
-      if (!password.trim()) {
+      if (!password) {
         this.$message.error("密码不能为空");
         return;
       }
@@ -125,33 +113,25 @@ export default {
       * */
 
 
-      const data = {};
-      data.username = userName;
+      this.data.password = this.$md5(this.data.password);
 
-      data.password = this.$md5(password.trim());
-
-      const result = await this.$API.reqLogin(data);
+      const result = await this.$API.reqLogin(this.data);
 
       if (result.resultDesc.errCode === 200) {
 
+        result.resultData.time = Date.now()
 
-        this.$store.commit("SETUSERNAME", result.resultData.userName)
-        this.$store.commit("SETTOKEN", result.resultData.token)
         this.$store.commit("SETUSERINFO", result.resultData)
 
         if (this.checked) {
-          sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          sessionStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
           sessionStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         } else {
-          localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          localStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
           localStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         }
 
         this.$message.success("登陆成功!老铁么么哒~~")
-        this.$router.push("/home");
 
+        this.$router.push("/home");
       } else {
         this.$message.error("登陆失败!老铁么么哒~~")
       }
@@ -159,11 +139,6 @@ export default {
     changeChecked() {
       this.checked = !this.checked;
     },
-  },
-  computed: {
-    ...mapState({
-      token: state => state.Login.token
-    })
   }
 };
 </script>
