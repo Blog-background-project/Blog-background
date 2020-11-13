@@ -112,6 +112,17 @@
             </template>
           </el-table-column>
         </el-table>
+        <div
+          style="
+            width: 100%;
+            hekght: 20px;
+            line-height: 20px;
+            font-size: 16px;
+            font-weight: 700;
+          "
+        >
+          <p v-if="modile">没有了！！！</p>
+        </div>
       </el-card>
     </div>
   </div>
@@ -126,7 +137,11 @@ export default {
   name: "FileManagement",
   data() {
     return {
+      //w
+      modile: false,
+      // 自适应高度
       tableHeight: 50,
+      // loding 等待
       loading: false,
       // 分类列表
       qryCategory: [],
@@ -169,14 +184,19 @@ export default {
     });
   },
   methods: {
+    // 无限滚动
     async load(cate = 0) {
       this.loading = true;
       let info = {};
       info.cate = cate;
-      info.pageNo = this.pageNo;
+      info.pageNo = this.pageNo + 1;
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
       // console.log(result);
+      if (!result.resultData) {
+        this.modile = true;
+        return;
+      }
       result.resultData.time = this.formTime(result.resultData);
 
       result.resultData.forEach((item) => {
@@ -326,4 +346,9 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.box {
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 700;
+}
 </style>
