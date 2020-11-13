@@ -90,6 +90,10 @@
         <quill-editor v-model="articleItem.content"></quill-editor>
       </div>
     </el-card>
+
+    <el-card>
+      <el-button type="primary" @click="changeCheckout">取消</el-button>
+    </el-card>
   </div>
 </template>
 
@@ -119,6 +123,10 @@ export default {
   },
   mounted() {},
   methods: {
+    // 切换 
+    changeCheckout(){
+      
+    },
     // tab切换
     handleSelect(key, keyPath) {
       // console.log(key, keyPath);

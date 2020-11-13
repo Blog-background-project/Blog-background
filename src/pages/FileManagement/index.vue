@@ -64,7 +64,12 @@
           </el-table-column>
           <el-table-column prop="title" label="标题" width="width">
           </el-table-column>
-          <el-table-column prop="time" label="日期" width="width" cell-click="sorting">
+          <el-table-column
+            prop="time"
+            label="日期"
+            width="width"
+            cell-click="sorting"
+          >
           </el-table-column>
           <el-table-column prop="commNums" label="评论" width="80">
           </el-table-column>
@@ -78,9 +83,14 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="160">
-            <template slot-scope="{ $index }">
-              <el-button type="primary" size="small" @click="changeCheckout($index)">修改</el-button>
-              <el-button type="danger" size="small" @click="deleteItem($index)"
+            <template slot-scope="{ row, $index }">
+              <el-button
+                type="primary"
+                size="small"
+                @click="changeCheckout(row)"
+                >修改</el-button
+              >
+              <el-button type="danger" size="small" @click="deleteItem(row)"
                 >删除</el-button
               >
             </template>
@@ -128,7 +138,7 @@ export default {
       qryArticle: [],
 
       // 是否显示文章详情页
-      checkout: false,
+      checkout: true,
     };
   },
   mounted() {
@@ -139,8 +149,8 @@ export default {
   },
   methods: {
     // 修改
-    changeCheckout(index){
-      this.checkout = !this.checkout
+    changeCheckout(index) {
+      this.checkout = !this.checkout;
     },
 
     // 获取文章所有分类
@@ -159,7 +169,7 @@ export default {
       info.pageNo = this.pageNo;
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
-      
+
       // 储存数据到当前组件
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
@@ -188,10 +198,10 @@ export default {
     },
 
     // 删除文章
-    async deleteItem(index) {
-      let userInfo = {};
-      userInfo.index = index;
-      const result = await this.$API.reqDelArticle(userInfo);
+    async deleteItem(row) {
+      if (confirm("确定删除吗？")) {
+        const result = await this.$API.reqDelArticle(row.id);
+      }
     },
 
     // 排序
@@ -219,7 +229,7 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-  //#region 
+  //#region
   // watch: {
   //   qryArticle: {
   //     immediate: true,
