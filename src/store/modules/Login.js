@@ -1,6 +1,7 @@
 let state = {
-    username: localStorage.getItem("OPENTUSERNAME_KEY"),
-    token: localStorage.getItem("OPENTOKEN_KEY"),
+    username: localStorage.getItem("OPENTUSERNAME_KEY") || sessionStorage.getItem("OPENTUSERNAME_KEY"),
+    token: localStorage.getItem("OPENTOKEN_KEY") || sessionStorage.getItem("OPENTOKEN_KEY"),
+    userInfo: {}
 }
 
 let mutations = {
@@ -9,6 +10,9 @@ let mutations = {
     },
     SETTOKEN(state, data) {
         state.token = data
+    },
+    SETUSERINFO(state, data) {
+        state.userInfo = data
     }
 }
 

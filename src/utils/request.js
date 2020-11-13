@@ -20,6 +20,7 @@ instance.interceptors.request.use((config) => {
         config.data.token = store.state.Login.token
         config.data.usertoken = store.state.Login.token
     }
+    console.log(config)
     return config
 })
 
