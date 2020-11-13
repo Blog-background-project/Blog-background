@@ -27,7 +27,7 @@
 
           <el-form-item label="类型">
             <el-select
-              v-model="formInline.pageNo"
+              v-model="formInline.type"
               size="small"
               placeholder="类型"
             >
@@ -39,7 +39,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-checkbox-group v-model="formInline.type">
+            <el-checkbox-group v-model="formInline.checkbox">
               <el-checkbox label="置顶" name="type"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
@@ -57,7 +57,14 @@
       </el-card>
 
       <el-card>
-        <el-table :data="qryArticle" style="width: 100%" border stripe>
+        <el-table
+          height="380"
+          highlight-current-row
+          :data="qryArticle"
+          style="width: 100%"
+          border
+          stripe
+        >
           <el-table-column prop="id" label="ID" sortable width="80">
           </el-table-column>
           <el-table-column prop="cateName" label="分类" width="120">
@@ -123,7 +130,7 @@ export default {
       // 分类列表
       qryCategory: [],
       // 每页个数
-      pageSize: 20,
+      pageSize: 30,
       // 页数
       pageNo: 1,
       // 总数
@@ -131,8 +138,8 @@ export default {
       // 收集数据
       formInline: {
         cate: "", //分类
-        type: false, //置顶
-        pageNo: "", //类型
+        checkbox: false, //置顶
+        type: "", //类型
         title: "", //输入内容
       },
 
@@ -175,7 +182,7 @@ export default {
     },
 
     // 获取文章列表
-    async getQryArticle(cate = 0) {
+    async getQryArticle(cate = 0, type = "") {
       // 整理数据发送请求
       let info = {};
       info.cate = cate;
@@ -187,7 +194,9 @@ export default {
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
 
+      // 格式化时间
       this.formTime(result.resultData);
+
       //#region
       // 时间格式化
       // 定义一个数组用来储存每个数据的 posttime
@@ -229,8 +238,8 @@ export default {
 
     // 根据分类获取数据
     changeAjak() {
-      let { cate, pageNo, title } = this.formInline;
-      this.getQryArticle(cate, pageNo);
+      let { cate } = this.formInline;
+      this.getQryArticle(cate);
     },
 
     // 删除文章
@@ -238,7 +247,7 @@ export default {
       let dataInfo = {};
       dataInfo.artId = row.id;
       const result = await this.$API.reqDelArticle(dataInfo);
-      this.getQryArticle()
+      this.getQryArticle();
     },
 
     // 格式化时间
