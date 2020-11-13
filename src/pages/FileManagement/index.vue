@@ -6,7 +6,7 @@
     >
       文章管理
     </i>
-    <div v-if="checkout">
+    <div>
       <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="搜索：分类">
@@ -80,16 +80,25 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="160">
-            <template slot-scope="{ row, $index }">
+            <template slot-scope="{ row }">
               <el-button
                 type="primary"
                 size="small"
                 @click="changeCheckout(row)"
                 >修改</el-button
               >
-              <el-button type="danger" size="small" @click="deleteItem(row)"
-                >删除</el-button
+              <el-popconfirm
+                style="margin-left: 5px"
+                @confirm="deleteItem(row)"
+                title="这是一段内容确定删除吗？"
               >
+                <el-button type="danger" size="small" slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
+              <!-- <el-button type="danger" size="small" @click="deleteItem(row)"
+                >删除</el-button
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -131,7 +140,7 @@ export default {
       qryArticle: [],
 
       // 是否显示文章详情页
-      checkout: true,
+      // checkout: true,
     };
   },
   mounted() {
@@ -150,7 +159,11 @@ export default {
     },
     // 修改
     changeCheckout(index) {
-      this.checkout = !this.checkout;
+      this.$message({
+        message: "功能正在开发中。。。。。",
+        type: "warning",
+      });
+      // this.checkout = !this.checkout;
     },
 
     // 获取文章所有分类
@@ -203,6 +216,7 @@ export default {
         // timeListT.push(item.posttime);
       });
 
+      //#region
       // let time = [];
       // timeListT.forEach((item) => {
       //   time.push(this.timestampToTime(item));
@@ -210,6 +224,7 @@ export default {
       // for (let i = 0; i < List.length; i++) {
       //   List[i].time = timeListT[i];
       // }
+      //#endregion
     },
 
     // 根据分类获取数据
@@ -220,15 +235,10 @@ export default {
 
     // 删除文章
     async deleteItem(row) {
-      if (confirm("确定删除吗？")) {
-        const result = await this.$API.reqDelArticle(row.id);
-      }
+      let dataInfo = {};
+      dataInfo.artId = row.id;
+      const result = await this.$API.reqDelArticle(dataInfo);
     },
-
-    // 排序
-    // sorting() {
-    //   console.log(111);
-    // },
 
     // 格式化时间
     timestampToTime(timestamp) {
@@ -250,7 +260,8 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-  //#region
+
+  //#region 监视
   // watch: {
   //   qryArticle: {
   //     immediate: true,
