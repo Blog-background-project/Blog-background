@@ -3,9 +3,10 @@
     <i
       class="el-icon-document-copy"
       style="font-size: 30px; margin-bottom: 20px"
-      >文章管理</i
     >
-    <div v-if="checkout">
+      文章管理
+    </i>
+    <div>
       <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="搜索：分类">
@@ -48,27 +49,28 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" size="small" @click="changeAjak"
-              >提交</el-button
-            >
+            <el-button type="primary" size="small" @click="changeAjak">
+              提交
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
 
       <el-card>
         <el-table :data="qryArticle" style="width: 100%" border stripe>
-          <el-table-column prop="id" label="ID" width="80"> </el-table-column>
+          <el-table-column prop="id" label="ID" sortable width="80">
+          </el-table-column>
           <el-table-column prop="cateName" label="分类" width="120">
           </el-table-column>
           <el-table-column prop="author" label="作者" width="120">
           </el-table-column>
           <el-table-column prop="title" label="标题" width="width">
           </el-table-column>
-          <el-table-column prop="time" label="日期" width="width" cell-click="sorting">
+          <el-table-column prop="time" label="日期" width="width" sortable>
           </el-table-column>
-          <el-table-column prop="commNums" label="评论" width="80">
+          <el-table-column prop="commNums" label="评论" sortable width="80">
           </el-table-column>
-          <el-table-column prop="viewNums" label="阅读量" width="80">
+          <el-table-column prop="viewNums" label="阅读量" sortable width="100">
           </el-table-column>
           <el-table-column prop="cover" label="状态" width="120">
             <template slot-scope="{ row, $index }">
@@ -78,15 +80,31 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="160">
-            <template slot-scope="{ $index }">
-              <el-button type="primary" size="small" @click="changeCheckout($index)">修改</el-button>
-              <el-button type="danger" size="small" @click="deleteItem($index)"
-                >删除</el-button
+            <template slot-scope="{ row }">
+              <el-button
+                type="primary"
+                size="small"
+                @click="changeCheckout(row)"
+                >修改</el-button
               >
+              <el-popconfirm
+                style="margin-left: 5px"
+                @confirm="deleteItem(row)"
+                title="这是一段内容确定删除吗？"
+              >
+                <el-button type="danger" size="small" slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
+              <!-- <el-button type="danger" size="small" @click="deleteItem(row)"
+                >删除</el-button
+              > -->
             </template>
           </el-table-column>
         </el-table>
         <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
           :page-size="pageSize"
           layout="prev, pager, next"
           :total="total"
@@ -94,24 +112,18 @@
         </el-pagination>
       </el-card>
     </div>
-
-    <Editor v-else></Editor>
   </div>
 </template>
 
 <script>
-import Editor from "./Editor";
 export default {
   name: "FileManagement",
-  components: {
-    Editor,
-  },
   data() {
     return {
       // 分类列表
       qryCategory: [],
       // 每页个数
-      pageSize: 10,
+      pageSize: 20,
       // 页数
       pageNo: 1,
       // 总数
@@ -128,7 +140,7 @@ export default {
       qryArticle: [],
 
       // 是否显示文章详情页
-      checkout: false,
+      // checkout: true,
     };
   },
   mounted() {
@@ -138,9 +150,20 @@ export default {
     this.getQryCategory();
   },
   methods: {
+    // 分页
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
     // 修改
-    changeCheckout(index){
-      this.checkout = !this.checkout
+    changeCheckout(index) {
+      this.$message({
+        message: "功能正在开发中。。。。。",
+        type: "warning",
+      });
+      // this.checkout = !this.checkout;
     },
 
     // 获取文章所有分类
@@ -159,26 +182,49 @@ export default {
       info.pageNo = this.pageNo;
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
-      
+
       // 储存数据到当前组件
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
 
+      this.formTime(result.resultData);
+      //#region
       // 时间格式化
       // 定义一个数组用来储存每个数据的 posttime
-      let timeListT = [];
-      result.resultData.forEach((item) => {
-        timeListT.push(item.posttime);
-      });
+      // let timeListT = [];
+      // result.resultData.forEach((item) => {
+      //   timeListT.push(item.posttime);
+      // });
       // 格式化时间
-      let time = [];
-      timeListT.forEach((item) => {
-        time.push(this.timestampToTime(item));
-      });
+      // let time = [];
+      // timeListT.forEach((item) => {
+      //   time.push(this.timestampToTime(item));
+      // });
       // 讲格式化好的数据储存到 qryArticle 中
-      for (let i = 0; i < this.qryArticle.length; i++) {
-        this.qryArticle[i].time = time[i];
-      }
+      // for (let i = 0; i < this.qryArticle.length; i++) {
+      //   this.qryArticle[i].time = time[i];
+      // }
+      //#endregion
+    },
+
+    // 格式化时间
+    formTime(List) {
+      let timeListT = [];
+      List.forEach((item) => {
+        item.time = this.timestampToTime(item.posttime);
+        // timeListT.push(this.timestampToTime(item.posttime))
+        // timeListT.push(item.posttime);
+      });
+
+      //#region
+      // let time = [];
+      // timeListT.forEach((item) => {
+      //   time.push(this.timestampToTime(item));
+      // });
+      // for (let i = 0; i < List.length; i++) {
+      //   List[i].time = timeListT[i];
+      // }
+      //#endregion
     },
 
     // 根据分类获取数据
@@ -188,15 +234,11 @@ export default {
     },
 
     // 删除文章
-    async deleteItem(index) {
-      let userInfo = {};
-      userInfo.index = index;
-      const result = await this.$API.reqDelArticle(userInfo);
-    },
-
-    // 排序
-    sorting() {
-      console.log(111);
+    async deleteItem(row) {
+      let dataInfo = {};
+      dataInfo.artId = row.id;
+      const result = await this.$API.reqDelArticle(dataInfo);
+      this.getQryArticle()
     },
 
     // 格式化时间
@@ -219,7 +261,8 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-  //#region 
+
+  //#region 监视
   // watch: {
   //   qryArticle: {
   //     immediate: true,
