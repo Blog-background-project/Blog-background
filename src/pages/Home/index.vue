@@ -80,22 +80,24 @@
           </el-breadcrumb>
         </div>
         <el-card shadow="hover" class="card-bottom">
-          <el-tabs v-model="activeName" type="card" @tab-click="handleClick" >
-            <el-tab-pane label="博客大全(10)" name="first">
+
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane :label="item.cateName" :name="item.cateID" v-for="(item,index) in categoryList" :key="index">
               <el-table
                 :data="article"
                 :show-header="false"
                 stripe
                 style="width: 100%"
+                v-for="(articleItem,index) in article" :key="articleItem.id"
               >
-                <el-table-column>12113</el-table-column>
-                <el-table-column>12113</el-table-column>
+                <el-table-column prop="title"></el-table-column>
+              
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
+            <!-- <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
             <el-tab-pane label="资源教程(3)" name="third"></el-tab-pane>
             <el-tab-pane label="网址导航(5)" name="fourth"></el-tab-pane>
-            <el-tab-pane label="官方动态(5)" name="fifth"></el-tab-pane>
+            <el-tab-pane label="官方动态(5)" name="fifth"></el-tab-pane> -->
           </el-tabs>
         </el-card>
       </el-col>
@@ -134,7 +136,7 @@ export default {
   name: "Home",
   data() {
     return {
-      activeName: "first",
+      activeName: "1",
       options: {
         type: "bar",
         title: {
@@ -199,9 +201,9 @@ export default {
       // 标签列表
       tagList: [],
       obj3: {
-        // username: "2506377990",
-        // usertoken: "445a319ebbce6fe37b026794eeab529f",
       },
+      // 分类列表
+      categoryList:[]
     };
   },
   components: {
@@ -209,8 +211,9 @@ export default {
   },
   mounted() {
     // this.getQryUserInfo();
-    this.getQryArticle();
+    // this.getQryArticle();
     this.getQryTag();
+    this.getQryCategory();
   },
   methods: {
     // 点击切换tab栏
@@ -233,6 +236,15 @@ export default {
       let result = await this.$API.reqQryTag(this.obj3);
       this.tagList = result.resultData;
     },
+    // 分类列表
+    async getQryCategory(){
+      let result = await this.$API.reqQryCategory({})
+      this.categoryList = result.resultData
+    },
+    // 选中分类tab的时候触发
+    handleClick(){
+      this.getQryArticle()
+    }
   },
 };
 </script>
