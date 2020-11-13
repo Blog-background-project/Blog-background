@@ -3,7 +3,9 @@ import App from './App.vue'
 import md5 from 'js-md5'
 
 import VueQuillEditor from 'vue-quill-editor'
+import elTableInfiniteScroll from 'el-table-infinite-scroll';
 
+Vue.use(elTableInfiniteScroll);
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
