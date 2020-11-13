@@ -1,5 +1,5 @@
 <template>
-  <!--       大容器   背景图-->
+  <!--     大容器   背景图-->
   <div class="login-container">
     <!-- 登录区 -->
     <div class="userlogin">
@@ -16,30 +16,23 @@
           <label for="username" class="el-icon-s-custom"></label>
           <input
               type="text"
-              name="username"
+              id="username"
               class="username"
               placeholder="请以字母开头，用户名最少6位"
-              v-model="userName"
+              v-model="data.username"
           />
         </div>
         <!-- 密码 -->
         <div class="layui-form-item layui-form-item-password">
-          <label class="el-icon-goods" style="z-index: 10"></label>
+          <label for="password" class="el-icon-goods" style="z-index: 10"></label>
           <el-input
               placeholder="密码最少6位必须包含数字字母"
-              v-model="password"
+              v-model.trim="data.password"
               show-password
               class="password"
+              id="password"
           >
-            <label for="password" class="el-icon-goods"></label>
           </el-input>
-          <!-- <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="密码"
-            v-model="password"
-          /> -->
         </div>
         <!-- 验证码    -->
         <div class="layui-form-item layui-form-yj">
@@ -50,7 +43,6 @@
               id="vercode"
               placeholder="请输入验证码"
           />
-          <!-- <div class="captcha"></div> -->
         </div>
         <!-- 保持登录区 -->
         <div class="layui-form-item layui-form-item-check">
@@ -67,10 +59,7 @@
             <a href="javascripy:;">忘记密码？</a>
           </div>
         </div>
-        <div @click="changeLogin" class="layui-form-item userinfo-login">
-          <!-- <a href=""> 登 录</a> -->
-          登 录
-        </div>
+        <div @click="changeLogin" class="layui-form-item userinfo-login">登 录</div>
         <div class="layui-form-item layui-form-item-rigester">
           <a href="javascript:;">注册账号</a>
         </div>
@@ -80,110 +69,76 @@
 </template>
 
 <script>
-import {mapState} from "vuex"
-
 export default {
   name: "login",
   data() {
     return {
-      input: "",
-      userName: "",
-      password: "",
+      data: {
+        username: "",
+        password: "",
+      },
       checked: "",
     };
   },
-  mounted() {
-    if (this.token) {
-      this.$router.push("/home")
-    }
-  },
   methods: {
     async changeLogin() {
-      let {userName, password} = this;
+      let {username, password} = this.data;
       // 手机号为空
-      if (!userName.trim()) {
+      if (!username.trim()) {
         // 提示用户
-        alert("用户名不能为空");
+        this.$message.error("用户名不能为空");
         return;
       }
 
-      // let phoneReg = /^[a-zA-Z]\w[0-9A-Za-z]{5，}$/;
-      // ^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$
-
-      // let userNamePhone = /(?![0-6]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}/;
-      // // 手机号格式不正确
-      // if (!userNamePhone.test(userName)) {
-      //   alert("用户名格式不正确");
-      //   return;
-      // }
-
       // 密码为空
-      if (!password.trim()) {
-        alert("密码不能为空");
+      if (!password) {
+        this.$message.error("密码不能为空");
         return;
       }
       let passwordChecking = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$/;
 
       if (!passwordChecking.test(password)) {
-        alert("密码必须有数字字母");
+        this.$message.error("密码必须有数字字母");
         return;
       }
 
       /*
-    * 用户登录接口
-    * 请求参数:
-    {
-        "username": "用户名",
-        "password": "明文密码(md5加密)",
-        "formSource": "请求来源"
-    }
-    * */
-      // reqLogin(data) {
-      //     return request({
-      //         url: URL + "login",
-      //         method: "POST",
-      //         data
-      //     })
-      // },
-      // md5  加密使用方法
-      // this.$md5('holle world')
+      * 用户登录接口
+      * 请求参数:
+      {
+          "username": "用户名",
+          "password": "明文密码(md5加密)",
+          "formSource": "请求来源"
+      }
+      * */
 
-      const data = {};
-      data.username = userName;
 
-      data.password = this.$md5(password.trim());
-      // console.log(this.$md5(password))
-      const result = await this.$API.reqLogin(data);
-      // console.log(result)
+      this.data.password = this.$md5(this.data.password);
+
+      const result = await this.$API.reqLogin(this.data);
+
       if (result.resultDesc.errCode === 200) {
-        this.$router.push("/home");
-        alert("登录成功");
-        // console.log(result);
-        this.$store.commit("SETUSERNAME", result.resultData.userName)
-        this.$store.commit("SETTOKEN", result.resultData.token)
+
+        result.resultData.time = Date.now()
+
+        this.$store.commit("SETUSERINFO", result.resultData)
 
         if (this.checked) {
-          sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          sessionStorage.setItem(
-              "OPENTUSERNAME_KEY",
-              result.resultData.userName
-          );
+          sessionStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         } else {
-          localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          localStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+          localStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         }
+
+        this.$message.success("登陆成功!老铁么么哒~~")
+
+        this.$router.push("/home");
       } else {
-        alert("登录失败，请重新登录");
+        this.$message.error("登陆失败!老铁么么哒~~")
       }
     },
     changeChecked() {
       this.checked = !this.checked;
     },
-  },
-  computed: {
-    ...mapState({
-      token: state => state.Login.token
-    })
   }
 };
 </script>
