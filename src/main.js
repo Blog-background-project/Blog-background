@@ -13,16 +13,14 @@ Vue.use(VueQuillEditor)
 Vue.config.productionTip = false
 
 
-//引入element-ui
-import {Button, Select, DatePicker, TimePicker, Switch} from 'element-ui';
-//注册element组件
-Vue.use(Button)
-Vue.use(Select)
-Vue.use(DatePicker)
-Vue.use(TimePicker)
-Vue.use(Switch)
 
+//注册element组件
 import {
+    Button,
+    Select,
+    DatePicker,
+    TimePicker,
+    Switch,
     Dropdown,
     DropdownMenu,
     DropdownItem,
@@ -39,6 +37,12 @@ import {
     TableColumn,
     Table,
     Checkbox,
+    Option,
+    Input,
+    Form,
+    FormItem,
+    CheckboxGroup,
+    CheckboxButton,
     Popover,
     Popconfirm,
     Breadcrumb,
@@ -46,18 +50,27 @@ import {
     Tabs,
     TabPane,
     Dialog,
-    Form,
-    FormItem,
-    Input,
     Message,
+    Upload,
+    MessageBox,
 } from 'element-ui';
+
 //注册element组件
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
 Vue.use(Card)
+Vue.use(Upload)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Progress)
 Vue.use(Avatar)
-
+Vue.use(Option)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(CheckboxGroup);
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
@@ -65,7 +78,7 @@ Vue.use(Tooltip)
 Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
-
+Vue.use(CheckboxButton);
 Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
@@ -80,7 +93,18 @@ Vue.use(TabPane)
 Vue.use(Dialog)
 Vue.use(Form)
 Vue.use(FormItem)
+Vue.use(Button)
+Vue.use(Select)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
 
+Vue.use(Option);
+
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
 
 //引入路由器
 import router from "@/router"
