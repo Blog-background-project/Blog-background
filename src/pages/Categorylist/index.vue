@@ -58,8 +58,14 @@
       </el-row>
     </div>
     <!-- 内容展示区域 -->
-    <div class="showCon">
-      <el-table :data="categoryInfo" border style="width: 100%">
+    <div class="infinite-list-wrapper showCon" style="overflow: auto">
+      <el-table
+        :data="categoryInfo"
+        border
+        style="width: 100%"
+        v-infinite-scroll="load"
+        infinite-scroll-disabled="disabled"
+      >
         <el-table-column
           prop="cateID"
           label="分类ID"
@@ -103,8 +109,10 @@
           </template>
         </el-table-column>
       </el-table>
+      <p v-if="loading">加载中...</p>
+      <p v-if="noMore">没有更多了</p>
       <!-- 分页器 -->
-      <el-pagination
+      <!-- <el-pagination
         style="margin-top: 20px"
         @size-change="handleSizeChange"
         @current-change="getQryCategory"
@@ -115,7 +123,7 @@
         :total="total"
         :hide-on-single-page="value"
       >
-      </el-pagination>
+      </el-pagination> -->
     </div>
   </el-card>
 </template>
@@ -132,6 +140,9 @@ export default {
       total: 0,
       value: false, // value用来当只有一页时隐藏分页
       categoryInfo: [],
+      loading: false,
+      count: 10, //下拉加载数
+      // arr: [], //每页条数
       // dialog表单
       dialogTableVisible: false,
       dialogFormVisible: false,
@@ -160,27 +171,44 @@ export default {
   },
   methods: {
     // 分页器处理每页的回调
-    handleSizeChange(size) {
-      this.limit = size;
-      this.getQryCategory(this.page);
-      // console.log(`${size}条每页`);
-      // console.log("当前页", this.limit);
-    },
+    // handleSizeChange(size) {
+    //   this.limit = size;
+    //   // this.getQryCategory(this.page);
+    //   // 页数
+    //   let pageNum = Math.ceil(this.total / this.limit);
+    //   console.log(`${size}条每页`, "共", pageNum, "页");
+    //   this.getQryCategory(this.page);
+    // },
     // 分页器处理当前页的回调
-    handleCurrentChange(val) {
-      console.log(`当前页${val}`);
+    // handleCurrentChange(val) {
+    //   console.log(`当前页${val}`);
+    // },
+    // 无限滚动
+    load() {
+      this.loading = true;
+      setTimeout(() => {
+        this.count += 2;
+        this.loading = false;
+      }, 2000);
     },
 
     // 请求
     async getQryCategory(data, pagee = 1) {
+      // 计算分页器
+
       this.page = pagee;
+      console.log(`当前页${this.page}`);
+
       let { page, limit } = this;
       let result = await this.$API.reqQryCategory({ data });
       // let result = await this.$API.reqQryCategory({ data }, page, limit);
       if (result.resultDesc.errCode === 200) {
         this.categoryInfo = result.resultData;
+        // this.arr = this.categoryInfo.slice(
+        //   this.limit * (this.page - 1),
+        //   this.limit * this.page
+        // );
         this.total = result.resultData.length;
-        // console.log(page, limit);
       }
     },
 
@@ -250,10 +278,22 @@ export default {
         });
     },
   },
+  computed: {
+    noMore() {
+      return this.count >= this.total;
+    },
+    disabled() {
+      return this.loading || this.noMore;
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
+.showCon {
+  height: 600px;
+  text-align: center;
+}
 .el-row {
   margin-bottom: 20px;
   &:last-child {

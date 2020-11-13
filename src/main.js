@@ -53,6 +53,7 @@ import {
     Message,
     Upload,
     MessageBox,
+    InfiniteScroll,
 } from 'element-ui';
 
 //注册element组件
@@ -100,6 +101,7 @@ Vue.use(TimePicker)
 Vue.use(Switch)
 
 Vue.use(Option);
+Vue.use(InfiniteScroll);
 
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
