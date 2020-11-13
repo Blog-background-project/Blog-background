@@ -1,13 +1,13 @@
 <template>
   <div>
-    <i
-      class="el-icon-document-copy"
-      style="font-size: 30px; margin-bottom: 20px"
-    >
-      文章管理
-    </i>
     <div>
       <el-card class="box-card" style="font-size: 16px; margin-bottom: 20px">
+        <i
+          class="el-icon-document-copy"
+          style="font-size: 30px; margin-bottom: 20px"
+        >
+          文章管理
+        </i>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="搜索：分类">
             <el-select
@@ -58,12 +58,14 @@
 
       <el-card>
         <el-table
-          height="380"
+          :height="tableHeight"
           highlight-current-row
           :data="qryArticle"
           style="width: 100%"
           border
           stripe
+          v-el-table-infinite-scroll="load"
+          ref="table"
         >
           <el-table-column prop="id" label="ID" sortable width="80">
           </el-table-column>
@@ -109,24 +111,24 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :page-size="pageSize"
-          layout="prev, pager, next"
-          :total="total"
-        >
-        </el-pagination>
+        <p v-if="loading" style="">加载中...</p>
+        <!-- <p v-if="noMore">没有更多了</p> -->
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
+import elTableInfiniteScroll from "el-table-infinite-scroll";
 export default {
+  directives: {
+    "el-table-infinite-scroll": elTableInfiniteScroll,
+  },
   name: "FileManagement",
   data() {
     return {
+      tableHeight: 50,
+      loading: false,
       // 分类列表
       qryCategory: [],
       // 每页个数
@@ -155,8 +157,34 @@ export default {
     this.getQryArticle();
     // 获取文章所有分类
     this.getQryCategory();
+    this.$nextTick(function () {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 150;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function () {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 150;
+      };
+    });
   },
   methods: {
+    async load(cate = 0) {
+      this.loading = true;
+      let info = {};
+      info.cate = cate;
+      info.pageNo = this.pageNo;
+      info.pageSize = this.pageSize;
+      const result = await this.$API.reqQryArticle(info);
+      // console.log(result);
+      result.resultData.time = this.formTime(result.resultData);
+
+      result.resultData.forEach((item) => {
+        this.qryArticle.push(item);
+      });
+      this.loading = false;
+    },
     // 分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -182,7 +210,7 @@ export default {
     },
 
     // 获取文章列表
-    async getQryArticle(cate = 0, type = "") {
+    async getQryArticle(cate = 0) {
       // 整理数据发送请求
       let info = {};
       info.cate = cate;
@@ -190,12 +218,11 @@ export default {
       info.pageSize = this.pageSize;
       const result = await this.$API.reqQryArticle(info);
 
+      // 格式化时间
+      this.formTime(result.resultData);
       // 储存数据到当前组件
       this.qryArticle = result.resultData;
       this.total = result.resultData.length;
-
-      // 格式化时间
-      this.formTime(result.resultData);
 
       //#region
       // 时间格式化
@@ -218,7 +245,6 @@ export default {
 
     // 格式化时间
     formTime(List) {
-      let timeListT = [];
       List.forEach((item) => {
         item.time = this.timestampToTime(item.posttime);
         // timeListT.push(this.timestampToTime(item.posttime))
@@ -270,7 +296,11 @@ export default {
       return Y + M + D + h + m + s;
     },
   },
-
+  computed: {
+    disabled() {
+      return this.loading || this.noMore;
+    },
+  },
   //#region 监视
   // watch: {
   //   qryArticle: {
