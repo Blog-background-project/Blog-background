@@ -16,12 +16,13 @@
             >添加</el-button
           >
           <el-dialog title="分类编辑 " :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-              <el-form-item label="名称" :label-width="formLabelWidth">
-                <el-input
-                  v-model="form.categoryName"
-                  autocomplete="off"
-                ></el-input>
+            <el-form :model="form" style="width: 80%" ref="form">
+              <el-form-item
+                label="名称"
+                :label-width="formLabelWidth"
+                prop="cateName"
+              >
+                <el-input v-model="form.cateName" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="别名" :label-width="formLabelWidth">
                 <el-input
@@ -30,12 +31,19 @@
                 ></el-input>
               </el-form-item>
               <el-form-item label="排序" :label-width="formLabelWidth">
-                <el-input v-model="form.order" autocomplete="off"></el-input>
+                <el-input
+                  v-model="form.cateOrder"
+                  autocomplete="off"
+                ></el-input>
               </el-form-item>
               <el-form-item label="父分类" :label-width="formLabelWidth">
                 <el-select v-model="form.region" placeholder="无">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+                  <el-option
+                    :label="itemName.cateName"
+                    :value="itemName.cateID"
+                    v-for="itemName in categoryInfo"
+                    :key="itemName.cateID"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -44,7 +52,6 @@
               <el-button type="primary" @click="addDialogAction"
                 >确 定</el-button
               >
-              <!-- dialogFormVisible = false -->
             </div>
           </el-dialog>
         </el-col>
@@ -83,17 +90,16 @@
               class="el-icon-edit"
               size="mini"
               title="修改"
+              @click="showDialogAction(row)"
             ></el-button>
-            <el-popconfirm title="你确定删除该分类吗？">
-              <el-button
-                style="margin-left: 5px"
-                slot="reference"
-                type="danger"
-                class="el-icon-delete"
-                size="mini"
-                @click="deletCategory"
-              ></el-button>
-            </el-popconfirm>
+            <el-button
+              style="margin-left: 5px"
+              type="danger"
+              class="el-icon-delete"
+              size="mini"
+              title="删除"
+              @click="deletCategory(row)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -130,9 +136,9 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       form: {
-        categoryName: "", //名称
+        cateName: "", //名称
         cateAlias: "", //别名
-        order: 0, //排名
+        cateOrder: 0, //排名
         region: "",
         // delivery: false,
         // type: [],
@@ -140,6 +146,13 @@ export default {
         // desc: "",
       },
       formLabelWidth: "120px",
+      // ruleForm: {
+      //   cateName: "",
+      // },
+      rules: {
+        //验证规则
+        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
+      },
     };
   },
   mounted() {
@@ -157,10 +170,7 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页${val}`);
     },
-    // 处理删除的回调
-    deletCategory() {
-      console.log(123);
-    },
+
     // 请求
     async getQryCategory(data, pagee = 1) {
       this.page = pagee;
@@ -174,24 +184,69 @@ export default {
       }
     },
 
-    // dialog点击添加或修改的逻辑
-    async addDialogAction(data) {
-      // 获取参数
-      let formList = this.form;
-      // 整理参数
-      // 发请求
-      let result = await this.$API.reqAddCategory({ data });
-      console.log(result);
-      if (result.resultDesc.errCode === 200) {
-        // 成功
-        // 提示添加成功
-        // this.$message.success(`${formLis}`)
-        this.$message.success("添加成功");
-      } else {
-        // 失败
-        // 请求失败
-        this.$message.success("添加失败");
-      }
+    // dialog点击添加的逻辑
+    addDialogAction() {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          // 获取参数
+          let categoryInfo = {
+            cateItem: this.form, //!!!!!!!!!!!!!!
+          };
+          console.log(categoryInfo);
+          // 整理参数
+          // 发请求
+          let result = await this.$API.reqAddCategory(categoryInfo);
+          if (result.resultDesc.errCode === 200) {
+            // 成功
+            // 提示添加成功
+            // this.$message.success(`${formLis}`)
+            this.$message.success(
+              `${categoryInfo.cateID ? "修改" : "添加"}成功`
+            );
+            this.dialogFormVisible = false;
+            this.getQryCategory();
+          } else {
+            // 失败
+            this.$message.error(`${categoryInfo.cateID ? "修改" : "添加"}失败`);
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 修改的逻辑
+    showDialogAction(row) {
+      this.dialogFormVisible = true;
+      this.form = { ...row };
+    },
+    // 处理删除的回调
+    deletCategory(row) {
+      // 弹框询问确定要删除吗？
+      this.$confirm("是否要删除该分类?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          // 成功-发请求并且提示，重发请求并返回页面
+          let result = await this.$API.reqDelCategory(row.cateID);
+          if (result.resultDesc.errCode === 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+            this.getQryCategory();
+          } else {
+            this.$message.error("删除失败");
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
 };
