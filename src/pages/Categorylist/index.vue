@@ -180,7 +180,7 @@ export default {
       if (result.resultDesc.errCode === 200) {
         this.categoryInfo = result.resultData;
         this.total = result.resultData.length;
-        console.log(page, limit);
+        // console.log(page, limit);
       }
     },
 
@@ -192,7 +192,6 @@ export default {
           let categoryInfo = {
             cateItem: this.form, //!!!!!!!!!!!!!!
           };
-          console.log(categoryInfo);
           // 整理参数
           // 发请求
           let result = await this.$API.reqAddCategory(categoryInfo);
@@ -201,13 +200,15 @@ export default {
             // 提示添加成功
             // this.$message.success(`${formLis}`)
             this.$message.success(
-              `${categoryInfo.cateID ? "修改" : "添加"}成功`
+              `${categoryInfo.cateItem.cateID ? "修改" : "添加"}成功`
             );
             this.dialogFormVisible = false;
             this.getQryCategory();
           } else {
             // 失败
-            this.$message.error(`${categoryInfo.cateID ? "修改" : "添加"}失败`);
+            this.$message.error(
+              `${categoryInfo.cateItem.cateID ? "修改" : "添加"}失败`
+            );
           }
         } else {
           console.log("error submit!!");
@@ -230,7 +231,7 @@ export default {
       })
         .then(async () => {
           // 成功-发请求并且提示，重发请求并返回页面
-          let result = await this.$API.reqDelCategory(row.cateID);
+          let result = await this.$API.reqDelCategory(row);
           if (result.resultDesc.errCode === 200) {
             this.$message({
               type: "success",

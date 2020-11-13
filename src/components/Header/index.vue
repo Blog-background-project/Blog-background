@@ -29,19 +29,16 @@
         </div>
         <!-- 用户头像 -->
         <div class="user-avator">
-<!--          <img src="../../assets/img/img.jpg"/>-->
+          <img :src="userInfo.headImg"/>
         </div>
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        {{ username }}
-                        <i class="el-icon-caret-bottom"></i>
-                    </span>
+          <span class="el-dropdown-link">
+              {{ userInfo.nickName ? userInfo.nickName : userInfo.userName }}
+              <i class="el-icon-caret-bottom"></i>
+          </span>
           <el-dropdown-menu slot="dropdown">
-            <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-              <el-dropdown-item>项目仓库</el-dropdown-item>
-            </a>
-            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+            <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -50,6 +47,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex"
+
 export default {
   data() {
     return {
@@ -60,25 +59,43 @@ export default {
     };
   },
   computed: {
-    username() {
-      let username = localStorage.getItem('ms_username');
-      return username ? username : this.name;
-    }
+    ...mapState({
+      userInfo: state => state.Login.userInfo
+    })
   },
   methods: {
     // 用户名下拉菜单选择事件
-    handleCommand(command) {
+    async handleCommand(command) {
       if (command == 'loginout') {
-        localStorage.removeItem('ms_username');
-        this.$router.push('/login');
+        let result = await this.$API.reqLoginOut({})
+
+        if (result.resultDesc.errCode === 200) {
+          localStorage.removeItem("OPENTOKEN_KEY");
+          localStorage.removeItem("OPENTUSERNAME_KEY");
+          localStorage.removeItem("OPENUSERINFO_KEY");
+
+          sessionStorage.removeItem("OPENTOKEN_KEY");
+          sessionStorage.removeItem("OPENTUSERNAME_KEY");
+          sessionStorage.removeItem("OPENUSERINFO_KEY");
+
+          this.$store.commit("SETUSERNAME", "")
+          this.$store.commit("SETTOKEN", "")
+          this.$store.commit("SETUSERINFO", {})
+
+          this.$router.push('/login');
+          this.$message.success("退出登陆成功,么么哒!~~")
+        }
+
       }
-    },
-    // 侧边栏折叠
+    }
+    ,
+// 侧边栏折叠
     collapseChage() {
       this.collapse = !this.collapse;
-      this.$Bus.$emit("collapse",this.collapse)
-    },
-    // 全屏事件
+      this.$Bus.$emit("collapse", this.collapse)
+    }
+    ,
+// 全屏事件
     handleFullScreen() {
       let element = document.documentElement;
       if (this.fullscreen) {
@@ -111,7 +128,10 @@ export default {
       this.collapseChage();
     }
   }
-};
+  ,
+
+}
+;
 </script>
 
 <style scoped>

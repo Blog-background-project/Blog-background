@@ -92,88 +92,68 @@ export default {
       checked: "",
     };
   },
-  mounted() {
-    if (this.token) {
-      this.$router.push("/home")
-    }
-  },
   methods: {
     async changeLogin() {
       let {userName, password} = this;
       // 手机号为空
       if (!userName.trim()) {
         // 提示用户
-        alert("用户名不能为空");
+        this.$message.error("用户名不能为空");
         return;
       }
 
-      // let phoneReg = /^[a-zA-Z]\w[0-9A-Za-z]{5，}$/;
-      // ^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$
-
-      // let userNamePhone = /(?![0-6]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}/;
-      // // 手机号格式不正确
-      // if (!userNamePhone.test(userName)) {
-      //   alert("用户名格式不正确");
-      //   return;
-      // }
-
       // 密码为空
       if (!password.trim()) {
-        alert("密码不能为空");
+        this.$message.error("密码不能为空");
         return;
       }
       let passwordChecking = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$/;
 
       if (!passwordChecking.test(password)) {
-        alert("密码必须有数字字母");
+        this.$message.error("密码必须有数字字母");
         return;
       }
 
       /*
-    * 用户登录接口
-    * 请求参数:
-    {
-        "username": "用户名",
-        "password": "明文密码(md5加密)",
-        "formSource": "请求来源"
-    }
-    * */
-      // reqLogin(data) {
-      //     return request({
-      //         url: URL + "login",
-      //         method: "POST",
-      //         data
-      //     })
-      // },
-      // md5  加密使用方法
-      // this.$md5('holle world')
+      * 用户登录接口
+      * 请求参数:
+      {
+          "username": "用户名",
+          "password": "明文密码(md5加密)",
+          "formSource": "请求来源"
+      }
+      * */
+
 
       const data = {};
       data.username = userName;
 
       data.password = this.$md5(password.trim());
-      // console.log(this.$md5(password))
+
       const result = await this.$API.reqLogin(data);
-      // console.log(result)
+
       if (result.resultDesc.errCode === 200) {
-        this.$router.push("/home");
-        alert("登录成功");
-        // console.log(result);
+
+
         this.$store.commit("SETUSERNAME", result.resultData.userName)
         this.$store.commit("SETTOKEN", result.resultData.token)
+        this.$store.commit("SETUSERINFO", result.resultData)
 
         if (this.checked) {
           sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          sessionStorage.setItem(
-              "OPENTUSERNAME_KEY",
-              result.resultData.userName
-          );
+          sessionStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+          sessionStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         } else {
           localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
           localStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+          localStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         }
+
+        this.$message.success("登陆成功!老铁么么哒~~")
+        this.$router.push("/home");
+
       } else {
-        alert("登录失败，请重新登录");
+        this.$message.error("登陆失败!老铁么么哒~~")
       }
     },
     changeChecked() {
