@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="input_item">
-          <div class="item_left">在首页是否直接跳转至网址？</div>
+          <div class="item_left">是否取消go跳转?</div>
           <div class="item_middle">
             <el-tooltip :content="value" placement="top">
               <el-switch
@@ -58,11 +58,11 @@
             </el-tooltip>
           </div>
           <div class="item_right">
-            打开此开关后在首页和列表页点击网站名称会直接跳转至该网站
+            打开此开关后会直接跳转至上面填写的网站url而不经过go跳转
           </div>
         </div>
         <div class="input_item">
-          <div class="item_left">在首页是否直接跳转至网址？</div>
+          <div class="item_left">是否显示查询seo按钮?</div>
           <div class="item_middle">
             <el-tooltip :content="value" placement="top">
               <el-switch
@@ -75,9 +75,7 @@
               </el-switch>
             </el-tooltip>
           </div>
-          <div class="item_right">
-            打开此开关后在首页和列表页点击网站名称会直接跳转至该网站
-          </div>
+          <div class="item_right">打开此开关后不显示查询seo按钮</div>
         </div>
       </div>
     </div>
