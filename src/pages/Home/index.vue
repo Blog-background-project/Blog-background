@@ -9,16 +9,22 @@
         <el-card class="userContainer" shadow="hover">
           <div class="userInfo">
             <el-avatar
-              src="./images/img.146655c9.jpg"
+              :src="userInfo.headImg"
               :size="120"
               class="avatar"
             ></el-avatar>
             <div class="userInfoList">
-              <div class="userName">admin</div>
-              <div class="userIdentity">管理员</div>
+              <div class="userName">{{userInfo.nickName}}</div>
+              <div class="userIdentity">{{userInfo.levelName}}</div>
             </div>
           </div>
+          <div class="loginUserInfo">
+            <div class="ip">ip地址：</div>
+            <div class="loginTime">登录时间：</div>
+            <div class="loginAddress">登录地址：</div>
+          </div>
         </el-card>
+
         <el-card class="dataProgress">
           <div class="header">访问量</div>
           <div class="progress">
@@ -80,18 +86,23 @@
           </el-breadcrumb>
         </div>
         <el-card shadow="hover" class="card-bottom">
-
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane :label="item.cateName" :name="item.cateID" v-for="(item,index) in categoryList" :key="index">
+            <el-tab-pane
+              :label="item.cateName"
+              :name="item.cateID"
+              v-for="(item, index) in categoryList"
+              :key="index"
+            >
               <el-table
                 :data="article"
                 :show-header="false"
                 stripe
                 style="width: 100%"
-                v-for="(articleItem,index) in article" :key="articleItem.id"
+                height="330"
+                v-for="(articleItem, index) in article"
+                :key="articleItem.id"
               >
                 <el-table-column prop="title"></el-table-column>
-              
               </el-table>
             </el-tab-pane>
             <!-- <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
@@ -132,6 +143,7 @@
 <script>
 // 引入vue-schart
 import Schart from "vue-schart";
+import { mapState } from "vuex";
 export default {
   name: "Home",
   data() {
@@ -180,8 +192,6 @@ export default {
           },
         ],
       },
-      // 用户信息数据
-      userInfo: {},
       obj: {
         targetUserid: 1,
         formSource: "web",
@@ -200,10 +210,9 @@ export default {
 
       // 标签列表
       tagList: [],
-      obj3: {
-      },
+      obj3: {},
       // 分类列表
-      categoryList:[]
+      categoryList: [],
     };
   },
   components: {
@@ -211,7 +220,7 @@ export default {
   },
   mounted() {
     // this.getQryUserInfo();
-    // this.getQryArticle();
+    this.getQryArticle();
     this.getQryTag();
     this.getQryCategory();
   },
@@ -237,14 +246,20 @@ export default {
       this.tagList = result.resultData;
     },
     // 分类列表
-    async getQryCategory(){
-      let result = await this.$API.reqQryCategory({})
-      this.categoryList = result.resultData
+    async getQryCategory() {
+      let result = await this.$API.reqQryCategory({});
+      this.categoryList = result.resultData;
     },
     // 选中分类tab的时候触发
-    handleClick(){
-      this.getQryArticle()
-    }
+    handleClick() {
+      this.getQryArticle();
+    },
+  },
+
+  computed: {
+    ...mapState({
+      userInfo: (state) => state.Login.userInfo,
+    }),
   },
 };
 </script>
@@ -271,6 +286,13 @@ export default {
         }
       }
     }
+  }
+  .loginUserInfo{
+    margin-top: 20px;
+    border-top:2px solid #999 ;
+    padding-top: 20px;
+    color: #999;
+    line-height: 2;
   }
 }
 // 数据进度条
@@ -349,7 +371,7 @@ export default {
   }
 }
 
-.card-bottom{
+.card-bottom {
   height: 410px;
 }
 // schart 图
@@ -357,6 +379,4 @@ export default {
   width: 100%;
   height: 300px;
 }
-
-
 </style>
