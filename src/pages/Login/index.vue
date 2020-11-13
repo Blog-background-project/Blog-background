@@ -92,11 +92,6 @@ export default {
       checked: "",
     };
   },
-  mounted() {
-    if (this.token) {
-      this.$router.push("/home")
-    }
-  },
   methods: {
     async changeLogin() {
       let {userName, password} = this;
@@ -139,23 +134,24 @@ export default {
 
       if (result.resultDesc.errCode === 200) {
 
-        this.$router.push("/home");
-
 
         this.$store.commit("SETUSERNAME", result.resultData.userName)
         this.$store.commit("SETTOKEN", result.resultData.token)
-
         this.$store.commit("SETUSERINFO", result.resultData)
 
         if (this.checked) {
           sessionStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
-          sessionStorage.setItem("OPENTUSERNAME_KEY",result.resultData.userName);
+          sessionStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+          sessionStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         } else {
           localStorage.setItem("OPENTOKEN_KEY", result.resultData.token);
           localStorage.setItem("OPENTUSERNAME_KEY", result.resultData.userName);
+          localStorage.setItem("OPENUSERINFO_KEY", JSON.stringify(result.resultData));
         }
 
         this.$message.success("登陆成功!老铁么么哒~~")
+        this.$router.push("/home");
+
       } else {
         this.$message.error("登陆失败!老铁么么哒~~")
       }
