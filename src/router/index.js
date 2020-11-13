@@ -20,20 +20,6 @@ router.beforeEach((to, from, next) => {
     } else {
         to.path === "/login" ? next() : next("/login")
     }
-    //
-    // if (to.path !== "/login") {
-    //     if (userInfo) {
-    //         next()
-    //     } else {
-    //         next("/login")
-    //     }
-    // } else {
-    //     if (userInfo) {
-    //         next("/home")
-    //     } else {
-    //         next()
-    //     }
-    // }
 })
 
 export default router

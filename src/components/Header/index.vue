@@ -54,7 +54,6 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
       message: 2
     };
   },
@@ -70,19 +69,12 @@ export default {
         let result = await this.$API.reqLoginOut({})
 
         if (result.resultDesc.errCode === 200) {
-          localStorage.removeItem("OPENTOKEN_KEY");
-          localStorage.removeItem("OPENTUSERNAME_KEY");
-          localStorage.removeItem("OPENUSERINFO_KEY");
+          localStorage.removeItem("OPENUSERINFO_KEY") ? localStorage.removeItem("OPENUSERINFO_KEY") : sessionStorage.removeItem("OPENUSERINFO_KEY");
 
-          sessionStorage.removeItem("OPENTOKEN_KEY");
-          sessionStorage.removeItem("OPENTUSERNAME_KEY");
-          sessionStorage.removeItem("OPENUSERINFO_KEY");
-
-          this.$store.commit("SETUSERNAME", "")
-          this.$store.commit("SETTOKEN", "")
           this.$store.commit("SETUSERINFO", {})
 
           this.$router.push('/login');
+
           this.$message.success("退出登陆成功,么么哒!~~")
         }
 
