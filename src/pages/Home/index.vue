@@ -42,7 +42,7 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">123</div>
+                  <div class="grid-num">{{ article.length }}</div>
                   <div>文章数量</div>
                 </div>
               </div>
@@ -64,7 +64,7 @@
               <div class="grid-content grid-con-3">
                 <i class="el-icon-shopping-bag-1 grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{ }}</div>
+                  <div class="grid-num">{{ tagList.length }}</div>
                   <div>标签总数</div>
                 </div>
               </div>
@@ -79,23 +79,25 @@
             >
           </el-breadcrumb>
         </div>
-        <el-card shadow="hover">
+        <el-card shadow="hover" class="card-bottom">
+
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="博客大全(10)" name="first">
+            <el-tab-pane :label="item.cateName" :name="item.cateID" v-for="(item,index) in categoryList" :key="index">
               <el-table
                 :data="article"
                 :show-header="false"
                 stripe
                 style="width: 100%"
+                v-for="(articleItem,index) in article" :key="articleItem.id"
               >
-                <el-table-column>12113</el-table-column>
-                <el-table-column>12113</el-table-column>
+                <el-table-column prop="title"></el-table-column>
+              
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
+            <!-- <el-tab-pane label="旅游板块(2)" name="second"></el-tab-pane>
             <el-tab-pane label="资源教程(3)" name="third"></el-tab-pane>
             <el-tab-pane label="网址导航(5)" name="fourth"></el-tab-pane>
-            <el-tab-pane label="官方动态(5)" name="fifth"></el-tab-pane>
+            <el-tab-pane label="官方动态(5)" name="fifth"></el-tab-pane> -->
           </el-tabs>
         </el-card>
       </el-col>
@@ -134,7 +136,7 @@ export default {
   name: "Home",
   data() {
     return {
-      activeName: "first",
+      activeName: "1",
       options: {
         type: "bar",
         title: {
@@ -181,10 +183,8 @@ export default {
       // 用户信息数据
       userInfo: {},
       obj: {
-        username: "2506377990",
         targetUserid: 1,
         formSource: "web",
-        usertoken: "鉴权token",
       },
       // 文章列表
       article: [],
@@ -192,8 +192,8 @@ export default {
         cate: 0,
         formSource: "web",
         pageNo: 1,
-        username: "2506377990",
-        usertoken: "8c60acc74434239b9bacfc0b8b0c6f6b",
+        // username: "2506377990",
+        // usertoken: "8c60acc74434239b9bacfc0b8b0c6f6b",
         pageSize: 10,
       },
       // 评论总数
@@ -201,18 +201,19 @@ export default {
       // 标签列表
       tagList: [],
       obj3: {
-        username: "2506377990",
-        usertoken: "f06cacd705e454e4d103404be0b0ba46",
       },
+      // 分类列表
+      categoryList:[]
     };
   },
   components: {
     Schart,
   },
   mounted() {
-    this.getQryUserInfo();
-    this.getQryArticle();
+    // this.getQryUserInfo();
+    // this.getQryArticle();
     this.getQryTag();
+    this.getQryCategory();
   },
   methods: {
     // 点击切换tab栏
@@ -224,6 +225,7 @@ export default {
       let result = await this.$API.reqQryUserInfo(this.obj);
       this.userInfo = result.resultData;
     },
+
     // 文章数量
     async getQryArticle() {
       let result = await this.$API.reqQryArticle(this.obj2);
@@ -231,9 +233,18 @@ export default {
     },
     // 标签总数
     async getQryTag() {
-      let result = await this.$API.reqQryTag();
+      let result = await this.$API.reqQryTag(this.obj3);
       this.tagList = result.resultData;
     },
+    // 分类列表
+    async getQryCategory(){
+      let result = await this.$API.reqQryCategory({})
+      this.categoryList = result.resultData
+    },
+    // 选中分类tab的时候触发
+    handleClick(){
+      this.getQryArticle()
+    }
   },
 };
 </script>
@@ -337,9 +348,15 @@ export default {
     font-size: 30px;
   }
 }
+
+.card-bottom{
+  height: 410px;
+}
 // schart 图
 .schart {
   width: 100%;
   height: 300px;
 }
+
+
 </style>
